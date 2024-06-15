@@ -93,7 +93,28 @@ def update_file(source_file_path, replacement_file_path, destination_file_path):
     with open(destination_file_path, 'w') as destination_file:
         destination_file.write(updated_code)
 
-def init_file(file_path):
+def extract_code_from_markdown(file_path):
+    import re
+    code_blocks = {}
+    current_language = None
+    current_code = []
+
+    with open(file_path, 'r') as f:
+        for line in f:
+            if line.startswith("```"):
+                if current_language:
+                    code_blocks[current_language] = "\n".join(current_code)
+                    current_language = None
+                    current_code = []
+                else:
+                    current_language = line.strip().strip("```")
+            elif current_language:
+                current_code.append(line.rstrip())
+
+    if current_language:
+        code_blocks[current_language] = "\n".join(current_code)
+
+    return code_blocks
     file_path = os.path.abspath(os.path.expanduser(file_path))
     with open(file_path, 'r') as f:
         source_code = f.read().encode()
