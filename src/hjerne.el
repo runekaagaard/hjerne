@@ -8,6 +8,9 @@
 (defvar hjerne-install-path "~/path/to/hjerne"
   "Path to the Hjerne installation directory.")
 
+(defvar hjerne-project-id nil
+  "ID of the current project. New changesets will be added to this project.")
+
 (defvar hjerne-changeset-id nil
   "ID of the current changeset.")
 
