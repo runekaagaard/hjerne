@@ -9,11 +9,16 @@ class ProjectAdmin(admin.ModelAdmin):
     list_display = ('title', 'description')
     search_fields = ('title', 'description')
 
+class ContextInline(admin.TabularInline):
+    model = Context
+    extra = 1
+
 @admin.register(ChangeSet)
 class ChangeSetAdmin(admin.ModelAdmin):
     list_display = ('title', 'project', 'description')
     search_fields = ('title', 'project__title', 'description')
     list_filter = ('project',)
+    inlines = [ContextInline]
 
 @admin.register(Context)
 class ContextAdmin(admin.ModelAdmin):
