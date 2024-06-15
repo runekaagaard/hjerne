@@ -1,7 +1,7 @@
 
 from django.core.management.base import BaseCommand, CommandError
 from context.models import ChangeSet, Context
-from context.api import update_file
+from context.api import update_symbol
 
 class Command(BaseCommand):
     help = 'Update the context for a given changeset'
@@ -23,6 +23,7 @@ class Command(BaseCommand):
             replacement_file_path = context.file  # Assuming the replacement code is in the same file
             destination_file_path = context.file  # Update the same file
 
-            update_file(source_file_path, replacement_file_path, destination_file_path)
+            replacement_code = code_for_context(context)
+            update_symbol(source_file_path, context.symbol, replacement_code)
 
         self.stdout.write(self.style.SUCCESS('Successfully updated context for changeset "%s"' % changeset_id))
