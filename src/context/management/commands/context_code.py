@@ -1,4 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
+from .hello import hello
 from context.models import ChangeSet, Context
 from context.api import code_for_context
 
