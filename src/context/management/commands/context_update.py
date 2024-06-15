@@ -1,7 +1,7 @@
 
 from django.core.management.base import BaseCommand, CommandError
 from context.models import ChangeSet, Context
-from context.api import update_symbol, code_for_context
+from context.api import update_symbol, init_file, top_level_symbols
 
 class Command(BaseCommand):
     help = 'Update the context for a given changeset'
