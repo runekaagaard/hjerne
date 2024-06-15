@@ -1,5 +1,7 @@
 (require 'chatgpt-shell)
 
+;; Vars
+
 (defvar hjerne-python-executable-path "python3"
   "Path to the Python executable.")
 
@@ -11,6 +13,22 @@
 
 (defvar hjerne-replacement-file nil
   "Path to the replacement file.")
+
+;; Helpers
+
+(defun hjerne-shell-maker-get-prompt-content ()
+  "Get the content of the command line (and any following command output) at point."
+  (let ((begin (shell-maker--prompt-begin-position)))
+    (buffer-substring-no-properties
+     begin
+     (save-excursion
+       (goto-char (shell-maker--prompt-end-position))
+       (re-search-forward (shell-maker-prompt-regexp shell-maker--config) nil t)
+       (if (= begin (shell-maker--prompt-begin-position))
+           (point-max)
+         (shell-maker--prompt-begin-position))))))
+
+;; Interacive functions
 
 (defun hjerne-context-add ()
   "Add context to a changeset using the current line in the active buffer."
@@ -73,18 +91,6 @@
                 (buffer-string))))
     (chatgpt-shell-send-to-buffer (concat prefix code))))
 
-(defun hjerne-shell-maker-get-prompt-content ()
-  "Get the content of the command line (and any following command output) at point."
-  (let ((begin (shell-maker--prompt-begin-position)))
-    (buffer-substring-no-properties
-     begin
-     (save-excursion
-       (goto-char (shell-maker--prompt-end-position))
-       (re-search-forward (shell-maker-prompt-regexp shell-maker--config) nil t)
-       (if (= begin (shell-maker--prompt-begin-position))
-           (point-max)
-         (shell-maker--prompt-begin-position))))))
-
 (defun hjerne-receive-replacement-from-chatgpt-shell ()
   "Receive replacement from ChatGPT shell, update context, and regenerate context code."
   (interactive)
@@ -93,8 +99,8 @@
     (with-temp-file temp-replacement-file
       (insert content))
     (let ((hjerne-replacement-file temp-replacement-file))
-      (hjerne-context-update hjerne-replacement-file t))
-    (hjerne-context-code)))
+      (hjerne-context-update hjerne-replacement-file t)))
+  (hjerne-context-code))
 
 (defun hjerne-context-remove-at-point ()
   "Remove context from a changeset using the current line in the active buffer."
