@@ -27,10 +27,9 @@ class Command(BaseCommand):
             if i:
                 self.stdout.write("\n")
             self.stdout.write(f"# file: {file}\n")
-            self.stdout.write("```python")
             for j, context in enumerate(contexts):
                 if j:
                     self.stdout.write("\n")
                 code = code_for_context(context)
                 self.stdout.write(code)
-            self.stdout.write("```\n")
+            self.stdout.write("\n")

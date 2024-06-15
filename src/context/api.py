@@ -46,18 +46,31 @@ def code_for_context(context):
     return ""
 
 def update_symbol(file_path, symbol_name, replacement_code):
-    pass
+    file_path = os.path.abspath(os.path.expanduser(file_path))
+    with open(file_path, 'r') as f:
+        source_code = f.read().encode()
+
+    _, tree, query = init_file(file_path)
+
+    for symbol in top_level_symbols(tree, query):
+        if symbol['symbol_name'] == symbol_name:
+            start_byte = symbol['node'].start_byte
+            end_byte = symbol['node'].end_byte
+            updated_code = source_code[:start_byte] + replacement_code.encode() + source_code[end_byte:]
+            break
+    else:
+        raise ValueError(f"Symbol '{symbol_name}' not found in {file_path}")
+
+    with open(file_path, 'w') as f:
+        f.write(updated_code.decode())
 
 def update_file(source_file_path, replacement_file_path, destination_file_path):
     source_file_path = os.path.abspath(os.path.expanduser(source_file_path))
     replacement_file_path = os.path.abspath(os.path.expanduser(replacement_file_path))
     destination_file_path = os.path.abspath(os.path.expanduser(destination_file_path))
 
-    def strip_code_blocks(code):
-        return "\n".join(line for line in code.splitlines() if not line.strip().startswith("```"))
-
     with open(source_file_path, 'r') as source_file:
-        source_code = strip_code_blocks(source_file.read()).encode()
+        source_code = source_file.read().encode()
 
     _, source_tree, source_query = init_file(source_file_path)
     _, replacement_tree, replacement_query = init_file(replacement_file_path)

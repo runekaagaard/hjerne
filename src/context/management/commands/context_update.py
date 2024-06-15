@@ -1,4 +1,3 @@
-
 from django.core.management.base import BaseCommand, CommandError
 from context.models import ChangeSet, Context
 from context.api import update_symbol, init_file, top_level_symbols
@@ -20,12 +19,10 @@ class Command(BaseCommand):
 
         contexts = Context.objects.filter(change_set=changeset)
         replacement_file_path = kwargs['replacement_file']
-        def strip_code_blocks(code):
-            return "\n".join(line for line in code.splitlines() if not line.strip().startswith("```"))
 
         with open(replacement_file_path, 'r') as f:
-            replacement_code = strip_code_blocks(f.read())
-        
+            replacement_code = f.read()
+
         for context in contexts:
             source_file_path = context.file
             destination_file_path = context.file  # Update the same file
