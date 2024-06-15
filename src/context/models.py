@@ -29,12 +29,9 @@ class Context(models.Model):
     change_set = models.ForeignKey(ChangeSet, on_delete=models.CASCADE, verbose_name="ChangeSet", help_text="Select the changeset")
     file = models.CharField(max_length=200, verbose_name="File", help_text="Enter the file name")
     symbol = models.CharField(max_length=200, verbose_name="Symbol", help_text="Enter the symbol name")
-    textfield = models.TextField(verbose_name="TextField", help_text="Enter the context text")
 
     class Meta:
         verbose_name = "Context"
         verbose_name_plural = "Contexts"
 
-    def __str__(self):
-        return f"{self.symbol} in {self.file}"
     
