@@ -50,8 +50,11 @@ def update_file(source_file_path, replacement_file_path, destination_file_path):
     replacement_file_path = os.path.abspath(os.path.expanduser(replacement_file_path))
     destination_file_path = os.path.abspath(os.path.expanduser(destination_file_path))
 
+    def strip_code_blocks(code):
+        return "\n".join(line for line in code.splitlines() if not line.strip().startswith("```"))
+
     with open(source_file_path, 'r') as source_file:
-        source_code = source_file.read().encode()
+        source_code = strip_code_blocks(source_file.read()).encode()
 
     _, source_tree, source_query = init_file(source_file_path)
     _, replacement_tree, replacement_query = init_file(replacement_file_path)
@@ -66,7 +69,7 @@ def update_file(source_file_path, replacement_file_path, destination_file_path):
             start_byte = symbol['node'].start_byte
             end_byte = symbol['node'].end_byte
             replacement_node = replacement_symbols[symbol_name]
-            replacement_text = replacement_node.text.decode()
+            replacement_text = strip_code_blocks(replacement_node.text.decode())
             updated_code = updated_code[:start_byte] + replacement_text + updated_code[end_byte:]
 
     destination_dir = os.path.dirname(destination_file_path)
