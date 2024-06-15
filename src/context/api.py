@@ -19,7 +19,27 @@ def top_level_symbols(tree, query):
 
         yield {"node": top_level_node, "symbol_name": node.text.decode()}
 
-def top_level_symbol_at(file_path, row):
+def init_file(file_path):
+    file_path = os.path.abspath(os.path.expanduser(file_path))
+    with open(file_path, 'r') as f:
+        source_code = f.read().encode()
+
+    language_name = mimetypes.guess_type(file_path)[0].split("/")[-1].split("-")[-1]
+
+    with warnings.catch_warnings():
+        warnings.simplefilter('ignore', FutureWarning)
+        language = get_language(language_name)
+
+        current_dir = os.path.dirname(__file__)
+        query_file_path = os.path.join(current_dir, f"queries/{language_name}.scm")
+        with open(query_file_path, 'r') as f:
+            query_content = f.read()
+
+        parser = get_parser(language_name)
+        tree = parser.parse(source_code)
+        query = language.query(query_content)
+
+        return parser, tree, query
     file_path = os.path.abspath(os.path.expanduser(file_path))
     _, tree, query = init_file(file_path)
 
@@ -64,7 +84,9 @@ def update_symbol(file_path, symbol_name, replacement_code):
     with open(file_path, 'w') as f:
         f.write(updated_code.decode())
 
-def update_file(source_file_path, replacement_file_path, destination_file_path):
+def strip_code_blocks(code):
+    import re
+    return re.sub(r'```.*?```', '', code, flags=re.DOTALL)
     source_file_path = os.path.abspath(os.path.expanduser(source_file_path))
     replacement_file_path = os.path.abspath(os.path.expanduser(replacement_file_path))
     destination_file_path = os.path.abspath(os.path.expanduser(destination_file_path))
