@@ -24,5 +24,6 @@ class Command(BaseCommand):
                 self.style.SUCCESS('Successfully removed context for symbol "%s" from changeset "%s"' %
                                    (symbol_name, changeset_id)))
         except Context.DoesNotExist:
-            raise CommandError('Context for symbol "%s" does not exist in changeset "%s"' %
-                               (symbol_name, changeset_id))
+            self.stdout.write(
+                self.style.WARNING('Context for symbol "%s" does not exist in changeset "%s"' %
+                                   (symbol_name, changeset_id)))
