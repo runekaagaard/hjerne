@@ -10,7 +10,9 @@ class Command(BaseCommand):
         parser.add_argument('replacement_file', type=str, help='The path to the replacement file')
 
         parser.add_argument('--from-markdown', action='store_true', help='Extract code from markdown blocks')
+    def handle(self, *args, **kwargs):
         changeset_id = kwargs['changeset_id']
+        from_markdown = kwargs['from_markdown']
 
         try:
             changeset = ChangeSet.objects.get(id=changeset_id)
@@ -20,7 +22,7 @@ class Command(BaseCommand):
         contexts = Context.objects.filter(change_set=changeset)
 
         for context in contexts:
-            from context.api import init_file, extract_code_from_markdown
+            from context.api import init_file
             _, tree, query = init_file(kwargs['replacement_file'])
             if from_markdown:
                 from context.api import extract_code_from_markdown
@@ -28,7 +30,7 @@ class Command(BaseCommand):
             else:
                 replacement_symbols = {
                 symbol['symbol_name']: symbol['node'].text.decode()
-                for symbol in top_level_symbols(tree, query, from_markdown=from_markdown)
+                for symbol in top_level_symbols(tree, query)
                 }
 
             if context.symbol in replacement_symbols:
