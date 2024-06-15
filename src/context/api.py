@@ -43,6 +43,7 @@ def code_for_context(context):
         if symbol['symbol_name'] == symbol_name:
             start_byte = symbol['node'].start_byte
             end_byte = symbol['node'].end_byte
+            print(start_byte, end_byte)
             return source_code[start_byte:end_byte]
 
     return ""
@@ -95,19 +96,19 @@ def init_file(file_path):
 
     return parser, tree, query
 
-def debug_print_file(file_path):
-    _, tree, query = init_file(file_path)
+# def debug_print_file(file_path):
+#     _, tree, query = init_file(file_path)
 
-    for top_level_symbol in top_level_symbols(tree, query):
-        print(top_level_symbol)
+#     for top_level_symbol in top_level_symbols(tree, query):
+#         print(top_level_symbol)
 
-if __name__ == "__main__":
-    debug_print_file("~/ws/cont-xt/src/cont_xt/test_project/test_file.py")
-    update_file("~/ws/cont-xt/src/cont_xt/test_project/test_file.py",
-                "~/ws/cont-xt/src/cont_xt/test_project/replacement.py",
-                "~/ws/cont-xt/src/cont_xt/test_project/destination.py")
+# if __name__ == "__main__":
+#     debug_print_file("~/ws/cont-xt/src/cont_xt/test_project/test_file.py")
+#     update_file("~/ws/cont-xt/src/cont_xt/test_project/test_file.py",
+#                 "~/ws/cont-xt/src/cont_xt/test_project/replacement.py",
+#                 "~/ws/cont-xt/src/cont_xt/test_project/destination.py")
 
-    # Test top_level_symbol_at function
-    print("symbol class", top_level_symbol_at("~/ws/cont-xt/src/cont_xt/test_project/test_file.py", 46))
-    print("symbol func",
-          top_level_symbol_at("~/ws/cont-xt/src/cont_xt/test_project/test_file.py", 33)["node"].text.decode())
+#     # Test top_level_symbol_at function
+#     print("symbol class", top_level_symbol_at("~/ws/cont-xt/src/cont_xt/test_project/test_file.py", 46))
+#     print("symbol func",
+#           top_level_symbol_at("~/ws/cont-xt/src/cont_xt/test_project/test_file.py", 33)["node"].text.decode())
