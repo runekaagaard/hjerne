@@ -117,4 +117,16 @@
                            hjerne-changeset-id
                            (shell-quote-argument (thing-at-point 'symbol))))))
 
-(provide 'hjerne)
+(defun hjerne-fetch-changesets ()
+  "Fetch the list of changesets."
+  (let ((output (shell-command-to-string (format "%s %s/manage.py change_sets_list"
+                                                 hjerne-python-executable-path
+                                                 hjerne-install-path))))
+    (split-string output "\n" t)))
+
+(defun hjerne-select-changeset ()
+  "Select a changeset and set `hjerne-changeset-id`."
+  (interactive)
+  (let* ((changesets (hjerne-fetch-changesets))
+         (selection (completing-read "Select changeset: " changesets)))
+    (setq hjerne-changeset-id (string-to-number (car (split-string selection " "))))))
