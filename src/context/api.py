@@ -32,7 +32,20 @@ def top_level_symbol_at(file_path, row):
     return None
 
 def code_for_context(context):
-    pass
+    file_path = os.path.abspath(os.path.expanduser(context.file))
+    with open(file_path, 'r') as f:
+        source_code = f.read()
+
+    symbol_name = context.symbol
+    _, tree, query = init_file(file_path)
+
+    for symbol in top_level_symbols(tree, query):
+        if symbol['symbol_name'] == symbol_name:
+            start_byte = symbol['node'].start_byte
+            end_byte = symbol['node'].end_byte
+            return source_code[start_byte:end_byte]
+
+    return ""
 
 def update_file(source_file_path, replacement_file_path, destination_file_path):
     source_file_path = os.path.abspath(os.path.expanduser(source_file_path))

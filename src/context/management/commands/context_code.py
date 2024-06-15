@@ -17,9 +17,17 @@ class Command(BaseCommand):
             raise CommandError('ChangeSet "%s" does not exist' % changeset_id)
 
         contexts = Context.objects.filter(change_set=changeset)
+        contexts_by_file = {}
         for context in contexts:
-            code = code_for_context(context)
-            self.stdout.write(f"# file: {context.file}\n")
+            if context.file not in contexts_by_file:
+                contexts_by_file[context.file] = []
+            contexts_by_file[context.file].append(context)
+
+        for file, contexts in contexts_by_file.items():
+            self.stdout.write(f"# file: {file}\n")
             self.stdout.write("```python\n")
-            self.stdout.write(code)
-            self.stdout.write("\n```\n")
+            for context in contexts:
+                code = code_for_context(context)
+                self.stdout.write(code)
+                self.stdout.write("\n")
+            self.stdout.write("```\n")
