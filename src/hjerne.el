@@ -84,12 +84,14 @@
          (shell-maker--prompt-begin-position))))))
 
 (defun hjerne-receive-replacement-from-chatgpt-shell ()
-  "Receive replacement from ChatGPT shell and write to the replacement file."
+  "Receive replacement from ChatGPT shell, update context, and regenerate context code."
   (interactive)
-  (unless hjerne-replacement-file
-    (error "hjerne-replacement-file is not set"))
-  (let ((content (hjerne-shell-maker-get-prompt-content)))
-    (with-temp-file hjerne-replacement-file
-      (insert content))))
+  (let ((temp-replacement-file (make-temp-file "hjerne-replacement-"))
+        (content (hjerne-shell-maker-get-prompt-content)))
+    (with-temp-file temp-replacement-file
+      (insert content))
+    (let ((hjerne-replacement-file temp-replacement-file))
+      (hjerne-context-update))
+    (hjerne-context-code)))
 
 (provide 'hjerne)
