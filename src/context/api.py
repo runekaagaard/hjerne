@@ -64,6 +64,15 @@ def update_symbol(file_path, symbol_name, replacement_code):
     with open(file_path, 'w') as f:
         f.write(updated_code.decode())
 
+def parse_markdown(source_code):
+    """                                                                                                
+     Extract all ```python ... ``` blocks and join them with an empty line between them.                
+     """
+    import re
+    pattern = re.compile(r'```python(.*?)```', re.DOTALL)
+    matches = pattern.findall(source_code.decode())
+    return "\n\n".join(matches).encode()
+
 def update_file(source_file_path, replacement_file_path, destination_file_path):
     source_file_path = os.path.abspath(os.path.expanduser(source_file_path))
     replacement_file_path = os.path.abspath(os.path.expanduser(replacement_file_path))

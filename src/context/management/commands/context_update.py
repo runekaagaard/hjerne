@@ -29,7 +29,8 @@ class Command(BaseCommand):
 
             if context.symbol in replacement_symbols:
                 update_symbol(context.file, context.symbol, replacement_symbols[context.symbol])
+                self.stdout.write(self.style.SUCCESS(f"Symbol '{context.symbol}' updated!"))
             else:
-                raise CommandError(f"Symbol '{context.symbol}' not found in replacement file")
+                self.stdout.write(self.style.WARNING(f"Symbol '{context.symbol}' not found in replacement file"))
 
         self.stdout.write(self.style.SUCCESS('Successfully updated context for changeset "%s"' % changeset_id))
