@@ -7,4 +7,4 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         changesets = ChangeSet.objects.all()
         for changeset in changesets:
-            self.stdout.write(f"{changeset.id} {changeset.title}")
+            self.stdout.write(f"{changeset.id} {changeset.project.title}.{changeset.title}")
