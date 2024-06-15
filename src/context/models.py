@@ -35,3 +35,5 @@ class Context(models.Model):
         verbose_name_plural = "Contexts"
 
     
+    class Meta:
+        unique_together = ('change_set', 'file', 'symbol')
