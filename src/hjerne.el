@@ -45,8 +45,8 @@
                    (current-buffer))
     (write-region (point-min) (point-max) hjerne-replacement-file)))
 
-(defun hjerne-context-update (&optional custom-replacement-file)
-  "Update the context for a given changeset. Optionally use a custom replacement file."
+(defun hjerne-context-update (&optional custom-replacement-file from-markdown)
+  "Update the context for a given changeset. Optionally use a custom replacement file and extract code from markdown."
   (interactive)
   (unless hjerne-changeset-id
     (error "hjerne-changeset-id is not set"))
@@ -55,11 +55,12 @@
       (error "Replacement file is not set"))
     (unless hjerne-install-path
       (error "hjerne-install-path is not set"))
-    (shell-command (format "%s %s/manage.py context_update %d %s"
+    (shell-command (format "%s %s/manage.py context_update %d %s %s"
                            hjerne-python-executable-path
                            hjerne-install-path
                            hjerne-changeset-id
-                           replacement-file))))
+                           replacement-file
+                           (if from-markdown "--from-markdown" "")))))
 
 (defun hjerne-send-context-code-to-chatgpt-shell ()
   "Send context code to ChatGPT shell with a prefix message."
@@ -92,7 +93,7 @@
     (with-temp-file temp-replacement-file
       (insert content))
     (let ((hjerne-replacement-file temp-replacement-file))
-      (hjerne-context-update))
+      (hjerne-context-update hjerne-replacement-file t))
     (hjerne-context-code)))
 
 (provide 'hjerne)
