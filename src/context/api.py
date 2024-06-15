@@ -93,10 +93,13 @@ def update_file(source_file_path, replacement_file_path, destination_file_path):
     with open(destination_file_path, 'w') as destination_file:
         destination_file.write(updated_code)
 
-def init_file(file_path):
+def init_file(file_path, from_markdown=False):
     file_path = os.path.abspath(os.path.expanduser(file_path))
     with open(file_path, 'r') as f:
         source_code = f.read().encode()
+
+    if from_markdown is True:
+        source_code = parse_markdown(source_code)
 
     language_name = mimetypes.guess_type(file_path)[0].split("/")[-1].split("-")[-1]
 
