@@ -26,17 +26,20 @@
                            filename
                            linenumber))))
 
-(defun hjerne-context-code ()
-  "Output code for a given changeset."
-  (interactive)
+(defun hjerne-context-code (replacement-file)
+  "Output code for a given changeset and write to the replacement file."
+  (interactive "FReplacement file: ")
   (unless hjerne-changeset-id
     (error "hjerne-changeset-id is not set"))
   (unless hjerne-install-path
     (error "hjerne-install-path is not set"))
-  (shell-command (format "%s %s/manage.py context_code %d"
-                         hjerne-python-executable-path
-                         hjerne-install-path
-                         hjerne-changeset-id)))
+  (with-temp-buffer
+    (shell-command (format "%s %s/manage.py context_code %d"
+                           hjerne-python-executable-path
+                           hjerne-install-path
+                           hjerne-changeset-id)
+                   (current-buffer))
+    (write-region (point-min) (point-max) replacement-file)))
 
 (defun hjerne-context-update ()
   "Update the context for a given changeset."
