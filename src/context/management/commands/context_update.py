@@ -18,21 +18,15 @@ class Command(BaseCommand):
             raise CommandError('ChangeSet "%s" does not exist' % changeset_id)
 
         contexts = Context.objects.filter(change_set=changeset)
-        replacement_file_path = kwargs['replacement_file']
-
-        with open(replacement_file_path, 'r') as f:
-            replacement_code = f.read()
 
         for context in contexts:
-            source_file_path = context.file
-            destination_file_path = context.file  # Update the same file
-            _, tree, query = init_file(replacement_file_path)
+            _, tree, query = init_file(kwargs['replacement_file'])
             replacement_symbols = {
                 symbol['symbol_name']: symbol['node'].text.decode() for symbol in top_level_symbols(tree, query)
             }
 
             if context.symbol in replacement_symbols:
-                update_symbol(source_file_path, context.symbol, replacement_symbols[context.symbol])
+                update_symbol(context.file, context.symbol, replacement_symbols[context.symbol])
             else:
                 raise CommandError(f"Symbol '{context.symbol}' not found in replacement file")
 
