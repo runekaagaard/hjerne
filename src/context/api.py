@@ -41,10 +41,7 @@ def code_for_context(context):
 
     for symbol in top_level_symbols(tree, query):
         if symbol['symbol_name'] == symbol_name:
-            start_byte = symbol['node'].start_byte
-            end_byte = symbol['node'].end_byte
-            print(start_byte, end_byte)
-            return source_code[start_byte:end_byte]
+            return symbol['node'].text.decode()
 
     return ""
 
