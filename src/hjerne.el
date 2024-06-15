@@ -180,4 +180,30 @@
                            hjerne-project-id
                            (shell-quote-argument title)))))
 
+(require 'hydra)
+
+(defhydra hydra-hjerne (:color blue :hint nil)
+  "
+^Hjerne Commands^
+-----------------------------------------
+[_a_] Add changeset
+[_c_] Add context
+[_o_] Output context code
+[_u_] Update context
+[_r_] Remove context
+[_s_] Select changeset
+[_t_] Send context code to ChatGPT shell
+[_g_] Receive replacement from ChatGPT shell
+[_q_] Quit
+"
+  ("a" hjerne-changeset-add)
+  ("c" hjerne-context-add)
+  ("o" hjerne-context-code)
+  ("u" hjerne-context-update)
+  ("r" hjerne-context-remove-at-point)
+  ("s" hjerne-select-changeset)
+  ("t" hjerne-send-context-code-to-chatgpt-shell)
+  ("g" hjerne-receive-replacement-from-chatgpt-shell)
+  ("q" nil :color blue))
+
 (provide 'hjerne)
