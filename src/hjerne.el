@@ -96,4 +96,19 @@
       (hjerne-context-update hjerne-replacement-file t))
     (hjerne-context-code)))
 
+(defun hjerne-context-remove-at-point ()
+  "Remove context from a changeset using the current line in the active buffer."
+  (interactive)
+  (unless hjerne-changeset-id
+    (error "hjerne-changeset-id is not set"))
+  (unless hjerne-install-path
+    (error "hjerne-install-path is not set"))
+  (let ((filename (buffer-file-name))
+        (linenumber (line-number-at-pos)))
+    (shell-command (format "%s %s/manage.py context_remove %d %s"
+                           hjerne-python-executable-path
+                           hjerne-install-path
+                           hjerne-changeset-id
+                           (shell-quote-argument (thing-at-point 'symbol))))))
+
 (provide 'hjerne)
