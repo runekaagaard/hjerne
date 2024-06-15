@@ -26,11 +26,13 @@
                            filename
                            linenumber))))
 
-(defun hjerne-context-code (replacement-file)
+(defun hjerne-context-code ()
   "Output code for a given changeset and write to the replacement file."
-  (interactive "FReplacement file: ")
+  (interactive)
   (unless hjerne-changeset-id
     (error "hjerne-changeset-id is not set"))
+  (unless hjerne-replacement-file
+    (error "hjerne-replacement-file is not set"))
   (unless hjerne-install-path
     (error "hjerne-install-path is not set"))
   (with-temp-buffer
@@ -39,7 +41,7 @@
                            hjerne-install-path
                            hjerne-changeset-id)
                    (current-buffer))
-    (write-region (point-min) (point-max) replacement-file)))
+    (write-region (point-min) (point-max) hjerne-replacement-file)))
 
 (defun hjerne-context-update ()
   "Update the context for a given changeset."
