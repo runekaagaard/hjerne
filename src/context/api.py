@@ -110,7 +110,10 @@ def init_file(file_path, from_markdown=False):
     if from_markdown is True:
         source_code = parse_markdown(source_code)
 
-    language_name = mimetypes.guess_type(file_path)[0].split("/")[-1].split("-")[-1]
+    try:
+        language_name = mimetypes.guess_type(file_path)[0].split("/")[-1].split("-")[-1]
+    except:
+        language_name = "python"
 
     with warnings.catch_warnings():
         warnings.simplefilter('ignore', FutureWarning)
