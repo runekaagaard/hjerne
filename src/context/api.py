@@ -45,6 +45,9 @@ def code_for_context(context):
 
     return ""
 
+def update_symbol(file_path, symbol_name, replacement_code):
+    pass
+
 def update_file(source_file_path, replacement_file_path, destination_file_path):
     source_file_path = os.path.abspath(os.path.expanduser(source_file_path))
     replacement_file_path = os.path.abspath(os.path.expanduser(replacement_file_path))
