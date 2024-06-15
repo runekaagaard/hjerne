@@ -20,12 +20,23 @@ class Command(BaseCommand):
 
         contexts = Context.objects.filter(change_set=changeset)
         replacement_file_path = kwargs['replacement_file']
+        def strip_code_blocks(code):
+            return "\n".join(line for line in code.splitlines() if not line.strip().startswith("```"))
+
         with open(replacement_file_path, 'r') as f:
-            replacement_code = f.read()
+            replacement_code = strip_code_blocks(f.read())
         
         for context in contexts:
             source_file_path = context.file
             destination_file_path = context.file  # Update the same file
-            update_symbol(source_file_path, context.symbol, replacement_code)
+            _, tree, query = init_file(replacement_file_path)
+            replacement_symbols = {
+                symbol['symbol_name']: symbol['node'].text.decode() for symbol in top_level_symbols(tree, query)
+            }
+
+            if context.symbol in replacement_symbols:
+                update_symbol(source_file_path, context.symbol, replacement_symbols[context.symbol])
+            else:
+                raise CommandError(f"Symbol '{context.symbol}' not found in replacement file")
 
         self.stdout.write(self.style.SUCCESS('Successfully updated context for changeset "%s"' % changeset_id))
