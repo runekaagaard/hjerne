@@ -149,6 +149,20 @@
                                                  hjerne-install-path))))
     (split-string output "\n" t)))
 
+(defun hjerne-fetch-projects ()
+  "Fetch the list of projects."
+  (let ((output (shell-command-to-string (format "%s %s/manage.py project_list"
+                                                 hjerne-python-executable-path
+                                                 hjerne-install-path))))
+    (split-string output "\n" t)))
+
+(defun hjerne-project-select ()
+  "Select a project and set `hjerne-project-id`."
+  (interactive)
+  (let* ((projects (hjerne-fetch-projects))
+         (selection (completing-read "Select project: " projects)))
+    (setq hjerne-project-id (string-to-number (car (split-string selection " "))))))
+    
 (defun hjerne-select-changeset ()
   "Select a changeset and set `hjerne-changeset-id`."
   (interactive)
@@ -186,6 +200,7 @@
   "
 ^Hjerne Commands^
 -----------------------------------------
+[_p_] Select project
 [_a_] Add changeset
 [_c_] Add context
 [_o_] Output context code
@@ -196,6 +211,7 @@
 [_g_] Receive replacement from ChatGPT shell
 [_q_] Quit
 "
+  ("p" hjerne-project-select)
   ("a" hjerne-changeset-add)
   ("c" hjerne-context-add)
   ("o" hjerne-context-code)
