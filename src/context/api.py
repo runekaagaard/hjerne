@@ -31,6 +31,9 @@ def top_level_symbol_at(file_path, row):
 
     return None
 
+def code_for_context(context):
+    pass
+
 def update_file(source_file_path, replacement_file_path, destination_file_path):
     source_file_path = os.path.abspath(os.path.expanduser(source_file_path))
     replacement_file_path = os.path.abspath(os.path.expanduser(replacement_file_path))
