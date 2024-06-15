@@ -1,0 +1,3 @@
+django
+aider-chat
+tree_sitter_languages
