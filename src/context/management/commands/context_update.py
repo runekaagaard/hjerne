@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-from context.models import Context
+from context.models import ChangeSet, Context
 from context.api import update_file
 
 class Command(BaseCommand):
@@ -39,4 +39,4 @@ class Command(BaseCommand):
             context = contexts[choice]
 
         update_file(context.file, replacement_file, context.file)
-        self.stdout.write(self.style.SUCCESS('Successfully updated context "%s"' % context_id))
+        self.stdout.write(self.style.SUCCESS('Successfully updated context "%s"' % changeset_id))
