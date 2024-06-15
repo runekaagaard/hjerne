@@ -20,18 +20,12 @@ class Command(BaseCommand):
 
         contexts = Context.objects.filter(change_set=changeset)
         replacement_file_path = kwargs['replacement_file']
+        with open(replacement_file_path, 'r') as f:
+            replacement_code = f.read()
         
         for context in contexts:
             source_file_path = context.file
             destination_file_path = context.file  # Update the same file
-
-            replacement_code = code_for_context(context)
-            update_symbol(source_file_path, context.symbol, replacement_code)
-            source_file_path = context.file
-            replacement_file_path = context.file  # Assuming the replacement code is in the same file
-            destination_file_path = context.file  # Update the same file
-
-            replacement_code = code_for_context(context)
             update_symbol(source_file_path, context.symbol, replacement_code)
 
         self.stdout.write(self.style.SUCCESS('Successfully updated context for changeset "%s"' % changeset_id))
