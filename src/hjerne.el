@@ -31,7 +31,29 @@
            (point-max)
          (shell-maker--prompt-begin-position))))))
 
-;; Interacive functions
+(defun hjerne-get-current-git-branch ()
+  "Get the current git branch name."
+  (let ((branch (string-trim (shell-command-to-string "git rev-parse --abbrev-ref HEAD"))))
+    (unless (or (string= branch "main") (string= branch "master"))
+      branch)))
+
+(defun hjerne-changeset-add ()
+  "Add a new changeset to the current project."
+  (interactive)
+  (unless hjerne-project-id
+    (error "hjerne-project-id is not set"))
+  (unless hjerne-install-path
+    (error "hjerne-install-path is not set"))
+  (let* ((default-title (hjerne-get-current-git-branch))
+         (title (read-string (if default-title
+                                 (format "Enter changeset title (default: %s): " default-title)
+                               "Enter changeset title: ")
+                             nil nil default-title)))
+    (shell-command (format "%s %s/manage.py changeset_add %d %s"
+                           hjerne-python-executable-path
+                           hjerne-install-path
+                           hjerne-project-id
+                           (shell-quote-argument title)))))
 
 (defun hjerne-context-add ()
   "Add context to a changeset using the current line in the active buffer."
