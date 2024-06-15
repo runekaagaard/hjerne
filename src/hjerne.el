@@ -206,6 +206,6 @@
   ("g" hjerne-receive-replacement-from-chatgpt-shell)
   ("q" nil :color blue))
 
-(global-set-key (kbd "C-c h") 'hydra-hjerne/body)
+(global-set-key (kbd "s-h") 'hydra-hjerne/body)
 
 (provide 'hjerne)
