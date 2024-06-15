@@ -130,3 +130,5 @@
   (let* ((changesets (hjerne-fetch-changesets))
          (selection (completing-read "Select changeset: " changesets)))
     (setq hjerne-changeset-id (string-to-number (car (split-string selection " "))))))
+
+(provide 'hjerne)
