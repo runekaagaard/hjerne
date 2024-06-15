@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 from context.models import ChangeSet, Context
-from some_module import top_level_symbol_at  # Adjust the import path as necessary
+from context.api import top_level_symbol_at  # Adjust the import path as necessary
 
 class Command(BaseCommand):
     help = 'Add a context to a changeset'
