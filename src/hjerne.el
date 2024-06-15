@@ -71,4 +71,25 @@
                 (buffer-string))))
     (chatgpt-shell-send-to-buffer (concat prefix code))))
 
+(defun hjerne-shell-maker-get-prompt-content ()
+  "Get the content of the command line (and any following command output) at point."
+  (let ((begin (shell-maker--prompt-begin-position)))
+    (buffer-substring-no-properties
+     begin
+     (save-excursion
+       (goto-char (shell-maker--prompt-end-position))
+       (re-search-forward (shell-maker-prompt-regexp shell-maker--config) nil t)
+       (if (= begin (shell-maker--prompt-begin-position))
+           (point-max)
+         (shell-maker--prompt-begin-position))))))
+
+(defun hjerne-receive-replacement-from-chatgpt-shell ()
+  "Receive replacement from ChatGPT shell and write to the replacement file."
+  (interactive)
+  (unless hjerne-replacement-file
+    (error "hjerne-replacement-file is not set"))
+  (let ((content (hjerne-shell-maker-get-prompt-content)))
+    (with-temp-file hjerne-replacement-file
+      (insert content))))
+
 (provide 'hjerne)
