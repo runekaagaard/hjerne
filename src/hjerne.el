@@ -58,4 +58,17 @@
                          hjerne-changeset-id
                          hjerne-replacement-file)))
 
+(require 'chatgpt-shell)
+
+(defun hjerne-send-context-code-to-chatgpt-shell ()
+  "Send context code to ChatGPT shell with a prefix message."
+  (interactive)
+  (unless hjerne-replacement-file
+    (error "hjerne-replacement-file is not set"))
+  (let ((prefix "Please give a short description of the following code. Don't code anything just yet :)\n")
+        (code (with-temp-buffer
+                (insert-file-contents hjerne-replacement-file)
+                (buffer-string))))
+    (chatgpt-shell-send-to-buffer (concat prefix code))))
+
 (provide 'hjerne)
