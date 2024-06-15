@@ -1,4 +1,4 @@
-import mimetypes, os, sys
+import mimetypes, os, sys, warnings
 from tree_sitter_languages import get_language, get_parser
 
 def top_level_nodes(tree):
@@ -80,18 +80,21 @@ def init_file(file_path):
         source_code = f.read().encode()
 
     language_name = mimetypes.guess_type(file_path)[0].split("/")[-1].split("-")[-1]
-    language = get_language(language_name)
 
-    current_dir = os.path.dirname(__file__)
-    query_file_path = os.path.join(current_dir, f"queries/{language_name}.scm")
-    with open(query_file_path, 'r') as f:
-        query_content = f.read()
+    with warnings.catch_warnings():
+        warnings.simplefilter('ignore', FutureWarning)
+        language = get_language(language_name)
 
-    parser = get_parser(language_name)
-    tree = parser.parse(source_code)
-    query = language.query(query_content)
+        current_dir = os.path.dirname(__file__)
+        query_file_path = os.path.join(current_dir, f"queries/{language_name}.scm")
+        with open(query_file_path, 'r') as f:
+            query_content = f.read()
 
-    return parser, tree, query
+        parser = get_parser(language_name)
+        tree = parser.parse(source_code)
+        query = language.query(query_content)
+
+        return parser, tree, query
 
 # def debug_print_file(file_path):
 #     _, tree, query = init_file(file_path)
