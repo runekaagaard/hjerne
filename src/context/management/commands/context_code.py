@@ -23,11 +23,14 @@ class Command(BaseCommand):
                 contexts_by_file[context.file] = []
             contexts_by_file[context.file].append(context)
 
-        for file, contexts in contexts_by_file.items():
+        for i, (file, contexts) in enumerate(contexts_by_file.items()):
+            if i:
+                self.stdout.write("\n")
             self.stdout.write(f"# file: {file}\n")
-            self.stdout.write("```python\n")
-            for context in contexts:
+            self.stdout.write("```python")
+            for j, context in enumerate(contexts):
+                if j:
+                    self.stdout.write("\n")
                 code = code_for_context(context)
                 self.stdout.write(code)
-                self.stdout.write("\n")
             self.stdout.write("```\n")
