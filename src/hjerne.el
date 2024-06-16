@@ -172,21 +172,28 @@
                                    (shell-quote-argument file)
                                    line))))))))
 
-(defun hjerne-context-remove ()
-  "Remove context from a changeset using the current line in the active buffer."
+(defun hjerne-context-remove-dwim ()
+  "Remove context from a changeset using the current line in the active buffer or a selected region."
   (interactive)
-  (unless hjerne-changeset-id
-    (error "hjerne-changeset-id is not set"))
-  (unless hjerne-install-path
-    (error "hjerne-install-path is not set"))
-  (let ((filename (buffer-file-name))
-        (linenumber (line-number-at-pos)))
-    (shell-command (format "%s %s/manage.py context_remove %d %s %d"
-                           hjerne-python-executable-path
-                           hjerne-install-path
-                           hjerne-changeset-id
-                           filename
-                           linenumber))))
+  (if (use-region-p)
+      (let ((filename (buffer-file-name))
+            (start-line (line-number-at-pos (region-beginning)))
+            (end-line (line-number-at-pos (region-end))))
+        (shell-command (format "%s %s/manage.py context_remove_range %d %s %d %d"
+                               hjerne-python-executable-path
+                               hjerne-install-path
+                               hjerne-changeset-id
+                               (shell-quote-argument filename)
+                               start-line
+                               end-line)))
+    (let ((filename (buffer-file-name))
+          (linenumber (line-number-at-pos)))
+      (shell-command (format "%s %s/manage.py context_remove %d %s %d"
+                             hjerne-python-executable-path
+                             hjerne-install-path
+                             hjerne-changeset-id
+                             filename
+                             linenumber)))))
 
 (defun hjerne-fetch-projects ()
   "Fetch the list of projects."
@@ -265,7 +272,7 @@ Changeset: %`hjerne-changeset-id %s`hjerne-changeset-title
   ("A" hjerne-changeset-add)
   ("S" hjerne-changeset-select)
   ("a" hjerne-context-add-dwim)
-  ("r" hjerne-context-remove) 
+  ("r" hjerne-context-remove-dwim) 
   ("C" hjerne-changeset-clear-context)
   ("w" hjerne-context-code)
   ("u" hjerne-context-update)
