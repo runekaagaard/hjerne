@@ -240,10 +240,8 @@
 ^ ^                [_C_] Clear       [_w_] Write       [_q_] Quit
 ^ ^                ^ ^               [_u_] Update
 
-Project ID: %`hjerne-project-id
-Project Title: %`hjerne-project-title
-Changeset ID: %`hjerne-changeset-id
-Changeset Title: %`hjerne-changeset-title
+Project: %`hjerne-project-id %s`hjerne-project-title
+Changeset: %`hjerne-changeset-id %s`hjerne-changeset-title
 "
   ("p" hjerne-project-select)
   ("P" hjerne-project-add)
