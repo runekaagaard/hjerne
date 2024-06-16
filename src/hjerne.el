@@ -144,7 +144,7 @@
 
 (defun hjerne-fetch-changesets ()
   "Fetch the list of changesets."
-  (let ((output (shell-command-to-string (format "%s %s/manage.py change_sets_list"
+  (let ((output (shell-command-to-string (format "%s %s/manage.py changeset_list"
                                                  hjerne-python-executable-path
                                                  hjerne-install-path))))
     (split-string output "\n" t)))
@@ -163,7 +163,7 @@
          (selection (completing-read "Select project: " projects)))
     (setq hjerne-project-id (string-to-number (car (split-string selection " "))))))
     
-(defun hjerne-select-changeset ()
+(defun hjerne-changeset-select ()
   "Select a changeset and set `hjerne-changeset-id`."
   (interactive)
   (let* ((changesets (hjerne-fetch-changesets))
@@ -197,29 +197,24 @@
 (require 'hydra)
 
 (defhydra hydra-hjerne (:color blue :hint nil)
-  "
-^Hjerne Commands^
------------------------------------------
-[_p_] Select project
-[_a_] Add changeset
-[_c_] Add context
-[_o_] Output context code
-[_u_] Update context
-[_r_] Remove context
-[_s_] Select changeset
-[_t_] Send context code to ChatGPT shell
-[_g_] Receive replacement from ChatGPT shell
-[_q_] Quit
+"
+^Hjerne^
+^Project^          ^Changeset^          ^Context^         ^Other^
+---------------------------------------------------------------------------------
+[_p_] Select       [_A_] Add            [_i_] Insert      [_,_] chatgpt-shell send
+^ ^                [_S_] Select         [_r_] Remove      [_._] chatgpt-shell receive
+^ ^                ^ ^                  [_w_] Write       [_q_] Quit
+^ ^                ^ ^                  [_u_] Apply
 "
   ("p" hjerne-project-select)
-  ("a" hjerne-changeset-add)
-  ("c" hjerne-context-add)
-  ("o" hjerne-context-code)
+  ("A" hjerne-changeset-add)
+  ("S" hjerne-changeset-select)
+  ("i" hjerne-context-add)
+  ("r" hjerne-context-remove-at-point) 
+  ("w" hjerne-context-code)
   ("u" hjerne-context-update)
-  ("r" hjerne-context-remove-at-point)
-  ("s" hjerne-select-changeset)
-  ("t" hjerne-send-context-code-to-chatgpt-shell)
-  ("g" hjerne-receive-replacement-from-chatgpt-shell)
+  ("," hjerne-send-context-code-to-chatgpt-shell)
+  ("." hjerne-receive-replacement-from-chatgpt-shell)
   ("q" nil :color blue))
 
 (global-set-key (kbd "s-h") 'hydra-hjerne/body)

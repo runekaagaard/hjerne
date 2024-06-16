@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-from context.models import ChangeSet, Context
+from context.models import Changeset, Context
 from context.api import code_for_context
 
 class Command(BaseCommand):
@@ -12,11 +12,11 @@ class Command(BaseCommand):
         changeset_id = kwargs['changeset_id']
 
         try:
-            changeset = ChangeSet.objects.get(id=changeset_id)
-        except ChangeSet.DoesNotExist:
-            raise CommandError('ChangeSet "%s" does not exist' % changeset_id)
+            changeset = Changeset.objects.get(id=changeset_id)
+        except Changeset.DoesNotExist:
+            raise CommandError('Changeset "%s" does not exist' % changeset_id)
 
-        contexts = Context.objects.filter(change_set=changeset)
+        contexts = Context.objects.filter(changeset=changeset)
         contexts_by_file = {}
         for context in contexts:
             if context.file not in contexts_by_file:

@@ -16,6 +16,6 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterUniqueTogether(
             name='context',
-            unique_together={('change_set', 'file', 'symbol')},
+            unique_together={('changeset', 'file', 'symbol')},
         ),
     ]

@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-from context.models import ChangeSet, Context
+from context.models import Changeset, Context
 
 class Command(BaseCommand):
     help = 'Remove a context from a changeset'
@@ -13,12 +13,12 @@ class Command(BaseCommand):
         symbol_name = kwargs['symbol_name']
 
         try:
-            changeset = ChangeSet.objects.get(id=changeset_id)
-        except ChangeSet.DoesNotExist:
-            raise CommandError('ChangeSet "%s" does not exist' % changeset_id)
+            changeset = Changeset.objects.get(id=changeset_id)
+        except Changeset.DoesNotExist:
+            raise CommandError('Changeset "%s" does not exist' % changeset_id)
 
         try:
-            context = Context.objects.get(change_set=changeset, symbol=symbol_name)
+            context = Context.objects.get(changeset=changeset, symbol=symbol_name)
             context.delete()
             self.stdout.write(
                 self.style.SUCCESS('Successfully removed context for symbol "%s" from changeset "%s"' %

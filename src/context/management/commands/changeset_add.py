@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-from context.models import Project, ChangeSet
+from context.models import Project, Changeset
 
 class Command(BaseCommand):
     help = 'Add a changeset to a project'
@@ -17,5 +17,5 @@ class Command(BaseCommand):
         except Project.DoesNotExist:
             raise CommandError('Project "%s" does not exist' % project_id)
 
-        changeset = ChangeSet.objects.create(project=project, title=title)
+        changeset = Changeset.objects.create(project=project, title=title)
         self.stdout.write(self.style.SUCCESS('Successfully added changeset "%s" to project "%s"' % (title, project.title)))

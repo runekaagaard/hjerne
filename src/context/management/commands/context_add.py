@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-from context.models import ChangeSet, Context
+from context.models import Changeset, Context
 from context.api import top_level_symbol_at
 
 class Command(BaseCommand):
@@ -16,12 +16,12 @@ class Command(BaseCommand):
         linenumber = kwargs['linenumber']
 
         try:
-            changeset = ChangeSet.objects.get(id=changeset_id)
-        except ChangeSet.DoesNotExist:
-            raise CommandError('ChangeSet "%s" does not exist' % changeset_id)
+            changeset = Changeset.objects.get(id=changeset_id)
+        except Changeset.DoesNotExist:
+            raise CommandError('Changeset "%s" does not exist' % changeset_id)
 
         symbol_name = top_level_symbol_at(filename, linenumber)["symbol_name"]
-        _, created = Context.objects.get_or_create(change_set=changeset, file=filename, symbol=symbol_name)
+        _, created = Context.objects.get_or_create(changeset=changeset, file=filename, symbol=symbol_name)
         if created:
             self.stdout.write(self.style.SUCCESS('Successfully added context to changeset "%s"' % changeset_id))
         else:

@@ -13,15 +13,15 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='ChangeSet',
+            name='Changeset',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.CharField(help_text='Enter the changeset title', max_length=200, verbose_name='Title')),
                 ('description', models.TextField(blank=True, help_text='Enter the changeset description (optional)', null=True, verbose_name='Description')),
             ],
             options={
-                'verbose_name': 'ChangeSet',
-                'verbose_name_plural': 'ChangeSets',
+                'verbose_name': 'Changeset',
+                'verbose_name_plural': 'Changesets',
             },
         ),
         migrations.CreateModel(
@@ -43,7 +43,7 @@ class Migration(migrations.Migration):
                 ('file', models.CharField(help_text='Enter the file name', max_length=200, verbose_name='File')),
                 ('symbol', models.CharField(help_text='Enter the symbol name', max_length=200, verbose_name='Symbol')),
                 ('textfield', models.TextField(help_text='Enter the context text', verbose_name='TextField')),
-                ('change_set', models.ForeignKey(help_text='Select the changeset', on_delete=django.db.models.deletion.CASCADE, to='context.changeset', verbose_name='ChangeSet')),
+                ('changeset', models.ForeignKey(help_text='Select the changeset', on_delete=django.db.models.deletion.CASCADE, to='context.changeset', verbose_name='Changeset')),
             ],
             options={
                 'verbose_name': 'Context',

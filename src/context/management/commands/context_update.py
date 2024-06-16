@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-from context.models import ChangeSet, Context
+from context.models import Changeset, Context
 from context.api import update_symbol, init_file, top_level_symbols
 
 class Command(BaseCommand):
@@ -15,11 +15,11 @@ class Command(BaseCommand):
         from_markdown = kwargs['from_markdown']
 
         try:
-            changeset = ChangeSet.objects.get(id=changeset_id)
-        except ChangeSet.DoesNotExist:
-            raise CommandError('ChangeSet "%s" does not exist' % changeset_id)
+            changeset = Changeset.objects.get(id=changeset_id)
+        except Changeset.DoesNotExist:
+            raise CommandError('Changeset "%s" does not exist' % changeset_id)
 
-        contexts = Context.objects.filter(change_set=changeset)
+        contexts = Context.objects.filter(changeset=changeset)
         for context in contexts:
             from context.api import init_file
             _, tree, query = init_file(kwargs['replacement_file'], from_markdown=from_markdown)
