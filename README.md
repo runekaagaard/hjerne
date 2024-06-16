@@ -90,6 +90,11 @@ python manage.py context_remove <changeset_id> <filename> <linenumber>
 
 Updates the context for a given changeset.
 
+Usage:
+```sh
+python manage.py context_update <changeset_id> <replacement_file> [--from-markdown]
+```
+
 ### `treesitter_top_level_symbols_in_range`
 Outputs top-level symbols in a given range for a given file using Tree-sitter.
 
@@ -98,10 +103,6 @@ Usage:
 python manage.py treesitter_top_level_symbols_in_range <file_path> <row_from> <row_to>
 ```
 
-Usage:
-```sh
-python manage.py context_update <changeset_id> <replacement_file> [--from-markdown]
-```
 
 ### `context_code`
 
