@@ -1,8 +1,7 @@
 ; Match top-level rules
 (rule_set
-  (selectors
-    (selector) @symbol.name))
+  (prelude (selector_list (selector) @symbol.name)))
 
 ; Match top-level at-rules
 (at_rule
-  (identifier) @symbol.name)
+  (prelude (identifier) @symbol.name))
