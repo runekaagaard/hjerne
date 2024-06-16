@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 from context.models import Changeset, Context
-from context.api import init_files_from_markdown, update_symbol
+from context.api import init_files_from_markdown, update_symbol, top_level_symbols
 
 class Command(BaseCommand):
     help = 'Update the context for a given changeset using a markdown file'
