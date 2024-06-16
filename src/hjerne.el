@@ -128,12 +128,27 @@
                          hjerne-changeset-id
                          hjerne-replacement-file)))
 
+(defun hjerne-context-update-markdown-todo (replacement-file)
+  "Update the context for a given changeset using a markdown file."
+  (interactive)
+  (unless hjerne-changeset-id
+    (error "hjerne-changeset-id is not set"))
+  (unless hjerne-replacement-file
+    (error "hjerne-replacement-file is not set"))
+  (unless hjerne-install-path
+    (error "hjerne-install-path is not set"))
+  (shell-command (format "%s %s/manage.py context_update_markdown %d %s"
+                         hjerne-python-executable-path
+                         hjerne-install-path
+                         hjerne-changeset-id
+                         replacement-file)))
+
 (defun hjerne-send-context-code-to-chatgpt-shell ()
   "Send context code to ChatGPT shell with a prefix message."
   (interactive)
   (unless hjerne-replacement-file
     (error "hjerne-replacement-file is not set"))
-  (let ((prefix "Please give a short description of the following code. Don't code anything just yet :)\n\n")
+  (let ((prefix "\n\nWhen working with the code below it's super important that you repeat the `## file:` lines above each markdown code block.\n\nFor now just give a short summary of it. Don't repeat the code back to me!\n\n")
         (code (with-temp-buffer
                 (insert-file-contents hjerne-replacement-file)
                 (buffer-string))))
@@ -147,7 +162,7 @@
     (with-temp-file temp-replacement-file
       (insert content))
     (let ((hjerne-replacement-file temp-replacement-file))
-      (hjerne-context-update hjerne-replacement-file)))
+      (hjerne-context-update-markdown-todo hjerne-replacement-file)))
   (hjerne-context-code))
 
 (defun hjerne-changeset-clear-context ()
