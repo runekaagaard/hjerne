@@ -176,23 +176,21 @@
     (unless (or (string= branch "xmain") (string= branch "xmaster"))
       branch)))
 
-(defun hjerne-changeset-add ()
-  "Add a new changeset to the current project."
+(defun hjerne-project-add ()
+  "Add a new project and update `hjerne-project-id`."
   (interactive)
-  (unless hjerne-project-id
-    (error "hjerne-project-id is not set"))
   (unless hjerne-install-path
     (error "hjerne-install-path is not set"))
-  (let* ((default-title (hjerne-get-current-git-branch))
-         (title (read-string (if default-title
-                                 (format "Enter changeset title (default: %s): " default-title)
-                               "Enter changeset title: ")
-                             nil nil default-title)))
-    (shell-command (format "%s %s/manage.py changeset_add %d %s"
-                           hjerne-python-executable-path
-                           hjerne-install-path
-                           hjerne-project-id
-                           (shell-quote-argument title)))))
+  (let ((title (read-string "Enter project title: "))
+        (description (read-string "Enter project description: ")))
+    (let ((output (shell-command-to-string (format "%s %s/manage.py project_add %s %s"
+                                                   hjerne-python-executable-path
+                                                   hjerne-install-path
+                                                   (shell-quote-argument title)
+                                                   (shell-quote-argument description)))))
+      (if (string-match "ID \\([0-9]+\\)" output)
+          (setq hjerne-project-id (string-to-number (match-string 1 output)))
+        (error "Failed to add project")))))
 
 (require 'hydra)
 
@@ -202,11 +200,12 @@
 ^Project^          ^Changeset^       ^Context^         ^Other^
 ------------------------------------------------------------------------------
 [_p_] Select       [_A_] Add         [_a_] Add         [_,_] chatgpt-shell send
-^ ^                [_S_] Select      [_r_] Remove      [_._] chatgpt-shell receive
+[_P_] Add          [_S_] Select      [_r_] Remove      [_._] chatgpt-shell receive
 ^ ^                ^ ^               [_w_] Write       [_q_] Quit
 ^ ^                ^ ^               [_u_] Update
 "
   ("p" hjerne-project-select)
+  ("P" hjerne-project-add)
   ("A" hjerne-changeset-add)
   ("S" hjerne-changeset-select)
   ("a" hjerne-context-add)
