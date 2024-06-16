@@ -38,7 +38,7 @@ class Command(BaseCommand):
 
         for language, files in files_by_language.items():
             for file, contexts in files:
-                self.stdout.write(f"\n## file: {file}\n")
+                self.stdout.write(f"\n## file: `{file}`\n")
                 self.stdout.write(f"```{language}\n")
                 for i, context in enumerate(contexts):
                     if i:

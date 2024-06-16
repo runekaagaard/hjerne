@@ -140,7 +140,7 @@ def init_files_from_markdown(file_path):
         source_code = f.read().encode()
 
     import re
-    pattern = re.compile(r'(?m)^## file: \s*(.*?)\n```(\w+)(.*?)```', re.DOTALL)
+    pattern = re.compile(r'(?m)^[# ]*file:[ `]+\s*(.*?)[`]*\n```(\w+)(.*?)```', re.DOTALL)
     matches = pattern.findall(source_code.decode())
 
     results = []
