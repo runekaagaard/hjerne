@@ -80,6 +80,7 @@
                            hjerne-install-path
                            hjerne-changeset-id
                            filename
+                           (shell-quote-argument filename)
                            linenumber))))
 
 (defun hjerne-context-code ()
