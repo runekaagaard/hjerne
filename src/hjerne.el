@@ -174,13 +174,13 @@
 
 (defun hjerne-show-buffer (filename)
   "Show the buffer for the given FILENAME. If the buffer is visible, switch to it. If a buffer exists, make it visible. If not, open it."
-  (interactive "fFilename: ")
   (let ((buffer (find-buffer-visiting filename)))
     (if buffer
         (if (get-buffer-window buffer 'visible)
             (select-window (get-buffer-window buffer))
           (switch-to-buffer buffer))
       (find-file filename))))
+
 (defun hjerne-fetch-projects ()
   "Fetch the list of projects."
   (let ((output (shell-command-to-string (format "%s %s/manage.py project_list"
