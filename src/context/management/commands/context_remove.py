@@ -6,19 +6,20 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument('changeset_id', type=int, help='The ID of the changeset')
-        parser.add_argument('symbol_name', type=str, help='The name of the symbol to remove')
+        parser.add_argument('linenumber', type=int, help='The line number in the file')
 
     def handle(self, *args, **kwargs):
         changeset_id = kwargs['changeset_id']
-        symbol_name = kwargs['symbol_name']
+        linenumber = kwargs['linenumber']
 
         try:
             changeset = Changeset.objects.get(id=changeset_id)
         except Changeset.DoesNotExist:
             raise CommandError('Changeset "%s" does not exist' % changeset_id)
 
+        symbol_name = top_level_symbol_at(filename, linenumber)["symbol_name"]
         try:
-            context = Context.objects.get(changeset=changeset, symbol=symbol_name)
+            context = Context.objects.get(changeset=changeset, file=filename, symbol=symbol_name)
             context.delete()
             self.stdout.write(
                 self.style.SUCCESS('Successfully removed context for symbol "%s" from changeset "%s"' %

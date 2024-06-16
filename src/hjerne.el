@@ -186,7 +186,7 @@
                            hjerne-python-executable-path
                            hjerne-install-path
                            hjerne-changeset-id
-                           (shell-quote-argument (thing-at-point 'symbol))))))
+                           linenumber))))
 
 (defun hjerne-fetch-projects ()
   "Fetch the list of projects."
