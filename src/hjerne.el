@@ -172,30 +172,15 @@
                                    (shell-quote-argument file)
                                    line))))))))
 
-(defun hjerne-context-remove-dwim ()
-  "Remove context from a changeset using the current line in the active buffer or a selected region."
-  (interactive)
-  (if (use-region-p)
-      (let ((filename (buffer-file-name))
-            (start-line (line-number-at-pos (region-beginning)))
-            (end-line (line-number-at-pos (region-end))))
-        (shell-command (format "%s %s/manage.py context_remove_range %d %s %d %d"
-                               hjerne-python-executable-path
-                               hjerne-install-path
-                               hjerne-changeset-id
-                               (shell-quote-argument filename)
-                               start-line
-                               end-line)))
-    (let ((filename (buffer-file-name))
-          (linenumber (line-number-at-pos)))
-      (shell-command (format "%s %s/manage.py context_remove %d %s %d"
-                             hjerne-python-executable-path
-                             hjerne-install-path
-                             hjerne-changeset-id
-                             filename
-                             linenumber)))))
-
-(defun hjerne-fetch-projects ()
+(defun hjerne-show-buffer (filename)
+  "Show the buffer for the given FILENAME. If the buffer is visible, switch to it. If a buffer exists, make it visible. If not, open it."
+  (interactive "fFilename: ")
+  (let ((buffer (find-buffer-visiting filename)))
+    (if buffer
+        (if (get-buffer-window buffer 'visible)
+            (select-window (get-buffer-window buffer))
+          (switch-to-buffer buffer))
+      (find-file filename))))
   "Fetch the list of projects."
   (let ((output (shell-command-to-string (format "%s %s/manage.py project_list"
                                                  hjerne-python-executable-path
