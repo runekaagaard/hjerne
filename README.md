@@ -1,17 +1,17 @@
 # Hjerne
 
-Hjerne is an app for managing projects, changesets, and contexts. It uses Tree-sitter to understand the code and supports sending changesets into a changeset file or the emacs chatgpt-shell buffer and merging the updated code directly back into your project.
+Hjerne is an app for managing projects, changesets, and contexts. It uses Tree-sitter to understand the code and supports sending changesets into a changeset file or the Emacs ChatGPT-shell buffer and merging the updated code directly back into your project.
 
 ## Features
 
-- 📁 **Project Management**: Easily add, list, and manage projects. Each project can contain multiple changesets.
-- 🌳 **Changeset Management**: Efficiently add, list, and manage changesets within a project. Changesets represent a collection of changes or contexts related to a project.
-- 📝 **Context Management**: Add, remove, and update contexts within a changeset. Contexts represent specific code elements (like functions, classes, or variables) within a file.
+- 📁 **Project Management**: Add, list, and manage projects. Each project has an ID, title, and description.
+- 🌳 **Changeset Management**: Add, list, and manage changesets within a project. Changesets represent a collection of changes or contexts.
+- 📝 **Context Management**: Add, remove, and update contexts within a changeset. Contexts represent specific code elements (like functions, classes, or variables).
 - 🌐 **Integration with Tree-sitter**: Utilize Tree-sitter for parsing and analyzing source code to identify top-level symbols and nodes.
-- 🧠 **Integration with ChatGPT**: Send and receive context code to and from a ChatGPT shell for code analysis or generation purposes.
-- 🛠️ **Elisp Integration**: Seamlessly integrate with Emacs, providing functions to interact with Django management commands and manage projects, changesets, and contexts from within Emacs.
+- 🧠 **Integration with ChatGPT**: Send and receive context code to and from a ChatGPT shell for code analysis or generation.
+- 🛠️ **Elisp Integration**: Integrate with Emacs, providing functions to interact with Django management commands and manage projects, changesets, and contexts.
 - 🗃️ **Django Admin**: Manage projects, changesets, and contexts through the Django admin interface.
-- 🗂️ **Hydra Menu**: Uses Hydra in Emacs to create a menu for easy access to various project, changeset, and context management functions.
+- 🗂️ **Hydra Menu**: Uses Hydra in Emacs for easy access to various management functions.
 
 ## Management Commands
 
