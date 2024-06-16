@@ -181,6 +181,7 @@
             (select-window (get-buffer-window buffer))
           (switch-to-buffer buffer))
       (find-file filename))))
+(defun hjerne-fetch-projects ()
   "Fetch the list of projects."
   (let ((output (shell-command-to-string (format "%s %s/manage.py project_list"
                                                  hjerne-python-executable-path
