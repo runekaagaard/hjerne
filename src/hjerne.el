@@ -146,11 +146,17 @@
 (defun hjerne-send-context-code-to-chatgpt-shell ()
   "Send context code to ChatGPT shell with a prefix message."
   (interactive)
-  (unless hjerne-replacement-file
-    (error "hjerne-replacement-file is not set"))
+  (unless hjerne-changeset-id
+    (error "hjerne-changeset-id is not set"))
+  (unless hjerne-install-path
+    (error "hjerne-install-path is not set"))
   (let ((prefix "\n\nWhen working with the code below it's super important that you repeat the `## file:` lines above each markdown code block.\n\nFor now just give a short summary of it. Don't repeat the code back to me! Remember to write the `## file:` lines EXACTLY the same!\n\n")
         (code (with-temp-buffer
-                (insert-file-contents hjerne-replacement-file)
+                (shell-command (format "%s %s/manage.py context_code_markdown %d"
+                                       hjerne-python-executable-path
+                                       hjerne-install-path
+                                       hjerne-changeset-id)
+                               (current-buffer))
                 (buffer-string))))
     (chatgpt-shell-send-to-buffer (concat prefix code))))
 
