@@ -119,7 +119,7 @@ To use Hjerne with Emacs, add the following to your `init.el` file:
 - `hjerne-project-select`: Select a project and set `hjerne-project-id`.
 - `hjerne-changeset-add`: Add a new changeset to the current project.
 - `hjerne-changeset-select`: Select a changeset for the given project and set `hjerne-changeset-id`.
-- `hjerne-context-add`: Add context to a changeset using the current line in the active buffer.
+- `hjerne-context-add-dwim`: Add context to a changeset using the current line in the active buffer or a selected region.
 - `hjerne-context-remove`: Remove context from a changeset using the current line in the active buffer.
 - `hjerne-context-code`: Output code for a given changeset and write to the replacement file.
 - `hjerne-context-update`: Update the context for a given changeset.
