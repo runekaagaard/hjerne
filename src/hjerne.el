@@ -166,12 +166,14 @@
         (let ((file (expand-file-name (match-string 1) project-root))
               (line (string-to-number (match-string 2))))
           (when (file-exists-p file)
-            (shell-command (format "%s %s/manage.py context_add %d %s %d"
-                                   hjerne-python-executable-path
-                                   hjerne-install-path
-                                   hjerne-changeset-id
-                                   (shell-quote-argument file)
-                                   line))))))))
+            (message "Adding context: file=%s, line=%d" file line)
+            ;; (shell-command (format "%s %s/manage.py context_add %d %s %d"
+            ;;                        hjerne-python-executable-path
+            ;;                        hjerne-install-path
+            ;;                        hjerne-changeset-id
+            ;;                        (shell-quote-argument file)
+            ;;                        line))
+            ))))))
 
 (defun hjerne-context-remove-at-point ()
   "Remove context from a changeset using the current line in the active buffer."
