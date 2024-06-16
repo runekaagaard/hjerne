@@ -66,7 +66,7 @@
             (setq hjerne-changeset-title title))
         (error "Failed to add changeset")))))
 
-(defun hjerne-context-add ()
+(defun hjerne-context-add-dwim ()
   "Add context to a changeset using the current line in the active buffer."
   (interactive)
   (unless hjerne-changeset-id
@@ -274,6 +274,22 @@ Changeset: %`hjerne-changeset-id %s`hjerne-changeset-title
   ("," hjerne-send-context-code-to-chatgpt-shell)
   ("." hjerne-receive-replacement-from-chatgpt-shell)
   ("q" nil :color blue))
+
+(defun hjerne-context-add-dwim ()
+  "Add context to a changeset using the current line in the active buffer or a selected region."
+  (interactive)
+  (if (use-region-p)
+      (let ((filename (buffer-file-name))
+            (start-line (line-number-at-pos (region-beginning)))
+            (end-line (line-number-at-pos (region-end))))
+        (shell-command (format "%s %s/manage.py treesitter_top_level_symbols_in_range %d %s %d %d"
+                               hjerne-python-executable-path
+                               hjerne-install-path
+                               hjerne-changeset-id
+                               (shell-quote-argument filename)
+                               start-line
+                               end-line)))
+    (hjerne-context-add)))
 
 (global-set-key (kbd "s-h") 'hydra-hjerne/body)
 
