@@ -4,13 +4,10 @@ Hjerne is a Django project that serves as a complete ChatGPT coder agent. It off
 
 ## Features
 
-- 🌳 **Tree-sitter Context Management**: Manage specific variables, classes, and functions for the agent.
 - 📁 **Project Management**: Add projects, which contain changesets, which in turn contain contexts.
-- 🆕 **Project and Changeset Management**: Easily add and list projects and changesets.
-- 🧹 **Context Management**: Add, remove, clear, and update contexts within changesets.
+- 🌳 **Tree-sitter Context Management**: Manage specific variables, classes, and functions for the agent.
 - 📝 **Code Output**: Output code for a given changeset.
-- 🧠 **Integration with ChatGPT**: Send and receive context code to and from ChatGPT shell.
-- 🛠️ **Management Commands**: Utilize various management commands to streamline operations.
+- 🛠️ **Management Commands**: Control everything with django management commands.
 - 🧠 **Integration with ChatGPT**: Send and receive context code to and from ChatGPT shell.
 
 ## Management Commands
