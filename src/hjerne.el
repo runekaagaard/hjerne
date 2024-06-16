@@ -130,6 +130,18 @@
       (hjerne-context-update hjerne-replacement-file t)))
   (hjerne-context-code))
 
+(defun hjerne-changeset-clear-context ()
+  "Clear all contexts in the current changeset."
+  (interactive)
+  (unless hjerne-changeset-id
+    (error "hjerne-changeset-id is not set"))
+  (unless hjerne-install-path
+    (error "hjerne-install-path is not set"))
+  (shell-command (format "%s %s/manage.py changeset_clear_context %d"
+                         hjerne-python-executable-path
+                         hjerne-install-path
+                         hjerne-changeset-id)))
+
 (defun hjerne-context-remove-at-point ()
   "Remove context from a changeset using the current line in the active buffer."
   (interactive)
@@ -204,7 +216,7 @@
 ------------------------------------------------------------------------------
 [_p_] Select       [_A_] Add         [_a_] Add         [_,_] chatgpt-shell send
 [_P_] Add          [_S_] Select      [_r_] Remove      [_._] chatgpt-shell receive
-^ ^                ^ ^               [_w_] Write       [_q_] Quit
+^ ^                [_C_] Clear       [_w_] Write       [_q_] Quit
 ^ ^                ^ ^               [_u_] Update
 "
   ("p" hjerne-project-select)
@@ -213,6 +225,7 @@
   ("S" hjerne-changeset-select)
   ("a" hjerne-context-add)
   ("r" hjerne-context-remove-at-point) 
+  ("C" hjerne-changeset-clear-context)
   ("w" hjerne-context-code)
   ("u" hjerne-context-update)
   ("," hjerne-send-context-code-to-chatgpt-shell)
