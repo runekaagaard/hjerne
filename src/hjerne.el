@@ -162,18 +162,16 @@
   (let ((project-root (ag/project-root default-directory)))
     (save-excursion
       (goto-char (point-min))
-      (while (re-search-forward "^\\([^:]+\\):\\([0-9]+\\):" nil t)
+      (while (re-search-forward "^\\([^: ]+\\):\\([0-9]+\\):" nil t)
         (let ((file (expand-file-name (match-string 1) project-root))
               (line (string-to-number (match-string 2))))
           (when (file-exists-p file)
-            (message "Adding context: file=%s, line=%d" file line)
-            ;; (shell-command (format "%s %s/manage.py context_add %d %s %d"
-            ;;                        hjerne-python-executable-path
-            ;;                        hjerne-install-path
-            ;;                        hjerne-changeset-id
-            ;;                        (shell-quote-argument file)
-            ;;                        line))
-            ))))))
+            (shell-command (format "%s %s/manage.py context_add %d %s %d"
+                                   hjerne-python-executable-path
+                                   hjerne-install-path
+                                   hjerne-changeset-id
+                                   (shell-quote-argument file)
+                                   line))))))))
 
 (defun hjerne-context-remove-at-point ()
   "Remove context from a changeset using the current line in the active buffer."
@@ -256,7 +254,8 @@
 [_p_] Select       [_A_] Add         [_a_] Add         [_,_] chatgpt-shell send
 [_P_] Add          [_S_] Select      [_r_] Remove      [_._] chatgpt-shell receive
 ^ ^                [_C_] Clear       [_w_] Write       [_q_] Quit
-^ ^                [_g_] Add from ag [_u_] Update
+^ ^                ^ ^               [_u_] Update
+^ ^                ^ ^               [_g_] Add from ag
 
 Project: %`hjerne-project-id %s`hjerne-project-title
 Changeset: %`hjerne-changeset-id %s`hjerne-changeset-title

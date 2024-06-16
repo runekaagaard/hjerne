@@ -26,10 +26,10 @@ def top_level_symbol_at(file_path, row):
     for symbol in top_level_symbols(tree, query):
         node = symbol['node']
 
-        if (node.start_point[0] <= row <= node.end_point[0]):
+        if (node.start_point[0] <= row - 1 <= node.end_point[0]):
             return symbol
 
-    return None
+    raise Exception(f"No top level symbol found in {file_path} at line {row}.")
 
 def code_for_context(context):
     file_path = os.path.abspath(os.path.expanduser(context.file))
