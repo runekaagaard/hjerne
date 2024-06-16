@@ -1,6 +1,6 @@
 # Hjerne
 
-Hjerne is an app written ind Django and emacs for managing projects, changesets, and contexts. It uses uses Tree-sitter to understand the code and supports sending changesets into the emacs chatgpt-shell buffer and merging the updated code directly back into your project.
+Hjerne is an app written ind Django and emacs for managing projects, changesets, and contexts. It uses Tree-sitter to understand the code and supports sending changesets into the emacs chatgpt-shell buffer and merging the updated code directly back into your project.
 
 ## Features
 
