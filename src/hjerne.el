@@ -253,7 +253,7 @@
 [_p_] Select       [_A_] Add         [_a_] Add         [_,_] chatgpt-shell send
 [_P_] Add          [_S_] Select      [_r_] Remove      [_._] chatgpt-shell receive
 ^ ^                [_C_] Clear       [_w_] Write       [_q_] Quit
-^ ^                ^ ^               [_u_] Update
+^ ^                [_g_] Add from ag [_u_] Update
 
 Project: %`hjerne-project-id %s`hjerne-project-title
 Changeset: %`hjerne-changeset-id %s`hjerne-changeset-title
@@ -267,6 +267,7 @@ Changeset: %`hjerne-changeset-id %s`hjerne-changeset-title
   ("C" hjerne-changeset-clear-context)
   ("w" hjerne-context-code)
   ("u" hjerne-context-update)
+  ("g" hjerne-context-add-ag)
   ("," hjerne-send-context-code-to-chatgpt-shell)
   ("." hjerne-receive-replacement-from-chatgpt-shell)
   ("q" nil :color blue))
