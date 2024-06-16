@@ -99,6 +99,19 @@ python manage.py context_code <changeset_id>
 
 Hjerne provides a set of Emacs Lisp functions to interact with the Django management commands and manage projects, changesets, and contexts directly from Emacs. The functions are accessible through a Hydra menu for easy access.
 
+### Installation
+
+To use Hjerne with Emacs, add the following to your `init.el` file:
+
+```emacs-lisp
+(add-to-list 'load-path "/install/path/to/hjerne/src")
+(require 'hjerne)
+(setq hjerne-install-path "/install/path/to/hjerne/src")
+(setq hjerne-replacement-file "/path/to/my/changeset.py")
+(setq hjerne-python-executable-path "/path/to/python")
+(setq chatgpt-shell-prompt-query-response-style 'shell)
+```
+
 ### Key Functions
 
 - `hjerne-project-add`: Add a new project and update `hjerne-project-id`.
