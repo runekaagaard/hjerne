@@ -174,7 +174,7 @@
                                    (shell-quote-argument file)
                                    line))))))))
 
-(defun hjerne-context-remove-at-point ()
+(defun hjerne-context-remove ()
   "Remove context from a changeset using the current line in the active buffer."
   (interactive)
   (unless hjerne-changeset-id
@@ -266,7 +266,7 @@ Changeset: %`hjerne-changeset-id %s`hjerne-changeset-title
   ("A" hjerne-changeset-add)
   ("S" hjerne-changeset-select)
   ("a" hjerne-context-add)
-  ("r" hjerne-context-remove-at-point) 
+  ("r" hjerne-context-remove) 
   ("C" hjerne-changeset-clear-context)
   ("w" hjerne-context-code)
   ("u" hjerne-context-update)
