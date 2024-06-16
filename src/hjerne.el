@@ -168,8 +168,7 @@
     (with-temp-file temp-replacement-file
       (insert content))
     (let ((hjerne-replacement-file temp-replacement-file))
-      (hjerne-context-update-markdown-todo hjerne-replacement-file)))
-  (hjerne-context-code))
+      (hjerne-context-update-markdown-todo hjerne-replacement-file))))
 
 (defun hjerne-changeset-clear-context ()
   "Clear all contexts in the current changeset."
