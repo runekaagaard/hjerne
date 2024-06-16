@@ -139,11 +139,11 @@ def init_files_from_markdown(file_path):
         source_code = f.read().encode()
 
     import re
-    pattern = re.compile(r'```(\w+)(.*?)```', re.DOTALL)
+    pattern = re.compile(r'(?m)^#\s*(.*?)\n```(\w+)(.*?)```', re.DOTALL)
     matches = pattern.findall(source_code.decode())
 
     results = []
-    for language_name, code in matches:
+    for filename, language_name, code in matches:
         source_code = code.encode()
 
         with warnings.catch_warnings():
@@ -159,6 +159,6 @@ def init_files_from_markdown(file_path):
             tree = parser.parse(source_code)
             query = language.query(query_content)
 
-            results.append((language_name, parser, tree, query))
+            results.append((filename, language_name, parser, tree, query))
 
     return results
