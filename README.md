@@ -152,7 +152,7 @@ Changeset: %`hjerne-changeset-id %s`hjerne-changeset-title
 
 ## Getting Started
 
-To get started with Hjerne, follow these steps:
+To get started with Hjerne, follow these steps to set up your environment and begin managing your projects efficiently:
 
 1. Clone the repository.
 2. Install the required dependencies listed in `requirements.txt`.
