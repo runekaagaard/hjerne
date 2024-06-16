@@ -1,6 +1,6 @@
-# Hjerne: Your Intelligent Coding Assistant
+# Hjerne
 
-Hjerne is a powerful Django-based application designed to streamline your coding workflow by managing projects, changesets, and contexts. With seamless integration with Tree-sitter and ChatGPT, Hjerne enhances productivity and provides intelligent code management capabilities directly within Emacs.
+Hjerne is an app written ind Django and emacs for managing projects, changesets, and contexts. It uses uses Tree-sitter to understand the code and supports sending changesets into the emacs chatgpt-shell buffer and merging the updated code directly back into your project.
 
 ## Features
 
