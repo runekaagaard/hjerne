@@ -122,6 +122,8 @@
     (error "hjerne-replacement-file is not set"))
   (unless hjerne-install-path
     (error "hjerne-install-path is not set"))
+  (with-current-buffer (find-file-noselect hjerne-replacement-file)
+    (save-buffer))
   (shell-command (format "%s %s/manage.py context_update_markdown %d %s"
                          hjerne-python-executable-path
                          hjerne-install-path
