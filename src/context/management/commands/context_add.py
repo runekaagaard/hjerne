@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 from context.models import Changeset, Context
-from context.api import top_level_symbol_at
+from context.api import top_level_symbols_in_range
 
 class Command(BaseCommand):
     help = 'Add a context to a changeset'
@@ -20,7 +20,10 @@ class Command(BaseCommand):
         except Changeset.DoesNotExist:
             raise CommandError('Changeset "%s" does not exist' % changeset_id)
 
-        symbol_name = top_level_symbol_at(filename, linenumber)["symbol_name"]
+        symbols = top_level_symbols_in_range(filename, linenumber, linenumber)
+        if not symbols:
+            raise CommandError(f"No top level symbol found in {filename} at line {linenumber}.")
+        symbol_name = symbols[0]["symbol_name"]
         _, created = Context.objects.get_or_create(changeset=changeset, file=filename, symbol=symbol_name)
         if created:
             self.stdout.write(self.style.SUCCESS('Successfully added context to changeset "%s"' % changeset_id))
