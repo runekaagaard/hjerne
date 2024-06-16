@@ -79,7 +79,6 @@
                            hjerne-python-executable-path
                            hjerne-install-path
                            hjerne-changeset-id
-                           filename
                            (shell-quote-argument filename)
                            linenumber))))
 
@@ -183,10 +182,11 @@
     (error "hjerne-install-path is not set"))
   (let ((filename (buffer-file-name))
         (linenumber (line-number-at-pos)))
-    (shell-command (format "%s %s/manage.py context_remove %d %s"
+    (shell-command (format "%s %s/manage.py context_remove %d %s %d"
                            hjerne-python-executable-path
                            hjerne-install-path
                            hjerne-changeset-id
+                           filename
                            linenumber))))
 
 (defun hjerne-fetch-projects ()

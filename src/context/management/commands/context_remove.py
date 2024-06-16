@@ -25,9 +25,9 @@ class Command(BaseCommand):
             context = Context.objects.get(changeset=changeset, file=filename, symbol=symbol_name)
             context.delete()
             self.stdout.write(
-                self.style.SUCCESS('Successfully removed context for symbol "%s" from changeset "%s"' %
+                self.style.SUCCESS('Successfully removed context for symbol "%s" from changeset %d' %
                                    (symbol_name, changeset_id)))
         except Context.DoesNotExist:
             self.stdout.write(
-                self.style.WARNING('Context for symbol "%s" does not exist in changeset "%s"' %
+                self.style.WARNING('Context for symbol "%s" does not exist in changeset %d' %
                                    (symbol_name, changeset_id)))
