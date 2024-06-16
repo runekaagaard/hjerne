@@ -1,6 +1,6 @@
 # Hjerne
 
-Hjerne is an app written ind Django and emacs for managing projects, changesets, and contexts. It uses Tree-sitter to understand the code and supports sending changesets into the emacs chatgpt-shell buffer and merging the updated code directly back into your project.
+Hjerne is an app for managing projects, changesets, and contexts. It uses Tree-sitter to understand the code and supports sending changesets into a changeset file or the emacs chatgpt-shell buffer and merging the updated code directly back into your project.
 
 ## Features
 
@@ -10,7 +10,7 @@ Hjerne is an app written ind Django and emacs for managing projects, changesets,
 - 🌐 **Integration with Tree-sitter**: Utilize Tree-sitter for parsing and analyzing source code to identify top-level symbols and nodes.
 - 🧠 **Integration with ChatGPT**: Send and receive context code to and from a ChatGPT shell for code analysis or generation purposes.
 - 🛠️ **Elisp Integration**: Seamlessly integrate with Emacs, providing functions to interact with Django management commands and manage projects, changesets, and contexts from within Emacs.
-- 🗂️ **Hydra Menu**: Use Hydra in Emacs to create a menu for easy access to various project, changeset, and context management functions.
+- 🗂️ **Hydra Menu**: Uses Hydra in Emacs to create a menu for easy access to various project, changeset, and context management functions.
 
 ## Management Commands
 
@@ -159,5 +159,3 @@ To get started with Hjerne, follow these steps:
 3. Set up your Django environment and run the necessary migrations.
 4. Start using the management commands to add projects, changesets, and contexts.
 5. Integrate with Emacs for an enhanced coding experience.
-
-Enjoy using Hjerne to manage your coding projects intelligently and efficiently!
