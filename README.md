@@ -146,11 +146,7 @@ To use Hjerne with Emacs, add the following to your `init.el` file:
 
 ### Hydra Menu
 
-The Hydra menu provides easy access to the various project, changeset, and context management functions:
-
 ```emacs-lisp
-(defhydra hydra-hjerne (:color blue :hint nil)
-"
 ^Hjerne^
 ^Project^          ^Changeset^       ^Context^         ^Other^
 ------------------------------------------------------------------------------
@@ -162,22 +158,7 @@ The Hydra menu provides easy access to the various project, changeset, and conte
 
 Project: %`hjerne-project-id %s`hjerne-project-title
 Changeset: %`hjerne-changeset-id %s`hjerne-changeset-title
-"
-  ("p" hjerne-project-select)
-  ("P" hjerne-project-add)
-  ("A" hjerne-changeset-add)
-  ("S" hjerne-changeset-select)
-  ("a" hjerne-context-add)
-  ("r" hjerne-context-remove) 
-  ("C" hjerne-changeset-clear-context)
-  ("w" hjerne-context-code)
-  ("u" hjerne-context-update)
-  ("g" hjerne-context-add-ag)
-  ("," hjerne-send-context-code-to-chatgpt-shell)
-  ("." hjerne-receive-replacement-from-chatgpt-shell)
-  ("q" nil :color blue))
-
-(global-set-key (kbd "s-h") 'hydra-hjerne/body)
+```
 ```
 
 ## Getting Started
