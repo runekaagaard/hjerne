@@ -6,7 +6,7 @@ from .models import Project, Changeset, Context
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ('title', 'description')
+    list_display = ('pk', 'title', 'description')
     search_fields = ('title', 'description')
 
 class ContextInline(admin.TabularInline):
@@ -15,13 +15,13 @@ class ContextInline(admin.TabularInline):
 
 @admin.register(Changeset)
 class ChangesetAdmin(admin.ModelAdmin):
-    list_display = ('title', 'project', 'description')
+    list_display = ('pk', 'title', 'project', 'description')
     search_fields = ('title', 'project__title', 'description')
     list_filter = ('project',)
     inlines = [ContextInline]
 
 @admin.register(Context)
 class ContextAdmin(admin.ModelAdmin):
-    list_display = ('symbol', 'file', 'changeset')
+    list_display = ('pk', 'symbol', 'file', 'changeset')
     search_fields = ('symbol', 'file', 'changeset__title')
     list_filter = ('changeset',)
