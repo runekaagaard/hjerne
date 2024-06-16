@@ -221,6 +221,8 @@
 [_P_] Add          [_S_] Select      [_r_] Remove      [_._] chatgpt-shell receive
 ^ ^                [_C_] Clear       [_w_] Write       [_q_] Quit
 ^ ^                ^ ^               [_u_] Update
+
+[HERE]
 "
   ("p" hjerne-project-select)
   ("P" hjerne-project-add)
