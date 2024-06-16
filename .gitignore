@@ -162,3 +162,4 @@ cython_debug/
 #.idea/
 .aider*
 src/changeset.py
+src/changeset.md
