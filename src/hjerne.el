@@ -67,20 +67,19 @@
         (error "Failed to add changeset")))))
 
 (defun hjerne-context-add-dwim ()
-  "Add context to a changeset using the current line in the active buffer."
+  "Add context to a changeset using the current line in the active buffer or a selected region."
   (interactive)
-  (unless hjerne-changeset-id
-    (error "hjerne-changeset-id is not set"))
-  (unless hjerne-install-path
-    (error "hjerne-install-path is not set"))
-  (let ((filename (buffer-file-name))
-        (linenumber (line-number-at-pos)))
-    (shell-command (format "%s %s/manage.py context_add %d %s %d"
-                           hjerne-python-executable-path
-                           hjerne-install-path
-                           hjerne-changeset-id
-                           (shell-quote-argument filename)
-                           linenumber))))
+  (if (use-region-p)
+      (let ((filename (buffer-file-name))
+            (start-line (line-number-at-pos (region-beginning)))
+            (end-line (line-number-at-pos (region-end))))
+        (shell-command (format "%s %s/manage.py context_add_range %d %s %d %d"
+                               hjerne-python-executable-path
+                               hjerne-install-path
+                               hjerne-changeset-id
+                               (shell-quote-argument filename)
+                               start-line
+                               end-line)))))
 
 (defun hjerne-context-code ()
   "Output code for a given changeset and write to the replacement file."
@@ -265,7 +264,7 @@ Changeset: %`hjerne-changeset-id %s`hjerne-changeset-title
   ("P" hjerne-project-add)
   ("A" hjerne-changeset-add)
   ("S" hjerne-changeset-select)
-  ("a" hjerne-context-add)
+  ("a" hjerne-context-add-dwim)
   ("r" hjerne-context-remove) 
   ("C" hjerne-changeset-clear-context)
   ("w" hjerne-context-code)
@@ -274,22 +273,6 @@ Changeset: %`hjerne-changeset-id %s`hjerne-changeset-title
   ("," hjerne-send-context-code-to-chatgpt-shell)
   ("." hjerne-receive-replacement-from-chatgpt-shell)
   ("q" nil :color blue))
-
-(defun hjerne-context-add-dwim ()
-  "Add context to a changeset using the current line in the active buffer or a selected region."
-  (interactive)
-  (if (use-region-p)
-      (let ((filename (buffer-file-name))
-            (start-line (line-number-at-pos (region-beginning)))
-            (end-line (line-number-at-pos (region-end))))
-        (shell-command (format "%s %s/manage.py treesitter_top_level_symbols_in_range %d %s %d %d"
-                               hjerne-python-executable-path
-                               hjerne-install-path
-                               hjerne-changeset-id
-                               (shell-quote-argument filename)
-                               start-line
-                               end-line)))
-    (hjerne-context-add)))
 
 (global-set-key (kbd "s-h") 'hydra-hjerne/body)
 
