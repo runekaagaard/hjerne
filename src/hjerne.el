@@ -199,17 +199,17 @@
 (defhydra hydra-hjerne (:color blue :hint nil)
 "
 ^Hjerne^
-^Project^          ^Changeset^          ^Context^         ^Other^
----------------------------------------------------------------------------------
-[_p_] Select       [_A_] Add            [_i_] Insert      [_,_] chatgpt-shell send
-^ ^                [_S_] Select         [_r_] Remove      [_._] chatgpt-shell receive
-^ ^                ^ ^                  [_w_] Write       [_q_] Quit
-^ ^                ^ ^                  [_u_] Apply
+^Project^          ^Changeset^       ^Context^         ^Other^
+------------------------------------------------------------------------------
+[_p_] Select       [_A_] Add         [_a_] Add         [_,_] chatgpt-shell send
+^ ^                [_S_] Select      [_r_] Remove      [_._] chatgpt-shell receive
+^ ^                ^ ^               [_w_] Write       [_q_] Quit
+^ ^                ^ ^               [_u_] Update
 "
   ("p" hjerne-project-select)
   ("A" hjerne-changeset-add)
   ("S" hjerne-changeset-select)
-  ("i" hjerne-context-add)
+  ("a" hjerne-context-add)
   ("r" hjerne-context-remove-at-point) 
   ("w" hjerne-context-code)
   ("u" hjerne-context-update)
