@@ -98,7 +98,7 @@
     (write-region (point-min) (point-max) hjerne-replacement-file))
   (find-file hjerne-replacement-file))
 
-(defun hjerne-context-update-old ()
+(defun hjerne-context-update ()
   "Update the context for a given changeset."
   (interactive)
   (unless hjerne-changeset-id
