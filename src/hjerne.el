@@ -98,7 +98,7 @@
     (write-region (point-min) (point-max) hjerne-replacement-file))
   (find-file hjerne-replacement-file))
 
-(defun hjerne-context-update ()
+(defun hjerne-context-update-old ()
   "Update the context for a given changeset."
   (interactive)
   (unless hjerne-changeset-id
@@ -108,6 +108,21 @@
   (unless hjerne-install-path
     (error "hjerne-install-path is not set"))
   (shell-command (format "%s %s/manage.py context_update %d %s"
+                         hjerne-python-executable-path
+                         hjerne-install-path
+                         hjerne-changeset-id
+                         hjerne-replacement-file)))
+
+(defun hjerne-context-update-markdown ()
+  "Update the context for a given changeset using a markdown file."
+  (interactive)
+  (unless hjerne-changeset-id
+    (error "hjerne-changeset-id is not set"))
+  (unless hjerne-replacement-file
+    (error "hjerne-replacement-file is not set"))
+  (unless hjerne-install-path
+    (error "hjerne-install-path is not set"))
+  (shell-command (format "%s %s/manage.py context_update_markdown %d %s"
                          hjerne-python-executable-path
                          hjerne-install-path
                          hjerne-changeset-id
