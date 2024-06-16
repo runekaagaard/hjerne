@@ -98,22 +98,20 @@
     (write-region (point-min) (point-max) hjerne-replacement-file))
   (find-file hjerne-replacement-file))
 
-(defun hjerne-context-update (&optional custom-replacement-file from-markdown)
-  "Update the context for a given changeset. Optionally use a custom replacement file and extract code from markdown."
+(defun hjerne-context-update-markdown ()
+  "Update the context for a given changeset using a markdown file."
   (interactive)
   (unless hjerne-changeset-id
     (error "hjerne-changeset-id is not set"))
-  (let ((replacement-file (or custom-replacement-file hjerne-replacement-file)))
-    (unless replacement-file
-      (error "Replacement file is not set"))
-    (unless hjerne-install-path
-      (error "hjerne-install-path is not set"))
-    (shell-command (format "%s %s/manage.py context_update %d %s %s"
-                           hjerne-python-executable-path
-                           hjerne-install-path
-                           hjerne-changeset-id
-                           replacement-file
-                           (if from-markdown "--from-markdown" "")))))
+  (unless hjerne-replacement-file
+    (error "hjerne-replacement-file is not set"))
+  (unless hjerne-install-path
+    (error "hjerne-install-path is not set"))
+  (shell-command (format "%s %s/manage.py context_update_markdown %d %s"
+                         hjerne-python-executable-path
+                         hjerne-install-path
+                         hjerne-changeset-id
+                         hjerne-replacement-file)))
 
 (defun hjerne-send-context-code-to-chatgpt-shell ()
   "Send context code to ChatGPT shell with a prefix message."
@@ -261,7 +259,7 @@ Changeset: %`hjerne-changeset-id %s`hjerne-changeset-title
   ("r" hjerne-context-remove-dwim) 
   ("C" hjerne-changeset-clear-context)
   ("w" hjerne-context-code)
-  ("u" hjerne-context-update)
+  ("u" hjerne-context-update-markdown)
   ("g" hjerne-context-add-ag)
   ("," hjerne-send-context-code-to-chatgpt-shell)
   ("." hjerne-receive-replacement-from-chatgpt-shell)
