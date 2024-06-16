@@ -176,7 +176,8 @@
   (interactive)
   (let* ((projects (hjerne-fetch-projects))
          (selection (completing-read "Select project: " projects)))
-    (setq hjerne-project-id (string-to-number (car (split-string selection " "))))))
+    (setq hjerne-project-id (string-to-number (car (split-string selection " "))))
+    (setq hjerne-changeset-id nil)))
     
 (defun hjerne-changeset-select ()
   "Select a changeset and set `hjerne-changeset-id`."
@@ -204,7 +205,9 @@
                                                    (shell-quote-argument title)
                                                    (shell-quote-argument description)))))
       (if (string-match "ID \\([0-9]+\\)" output)
-          (setq hjerne-project-id (string-to-number (match-string 1 output)))
+          (progn
+            (setq hjerne-project-id (string-to-number (match-string 1 output)))
+            (setq hjerne-changeset-id nil))
         (error "Failed to add project")))))
 
 (require 'hydra)
