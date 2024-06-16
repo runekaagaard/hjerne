@@ -272,6 +272,18 @@
             (setq hjerne-changeset-id nil))
         (error "Failed to add project")))))
 
+(defun hjerne-context-remove-dwim ()
+  "Remove context from a changeset using the current line in the active buffer."
+  (interactive)
+  (let ((filename (buffer-file-name))
+        (line (line-number-at-pos)))
+    (shell-command (format "%s %s/manage.py context_remove %d %s %d"
+                           hjerne-python-executable-path
+                           hjerne-install-path
+                           hjerne-changeset-id
+                           (shell-quote-argument filename)
+                           line))))
+
 (require 'hydra)
 
 (defhydra hydra-hjerne (:color blue :hint nil)
@@ -305,14 +317,3 @@ Changeset: %`hjerne-changeset-id %s`hjerne-changeset-title
 (global-set-key (kbd "s-h") 'hydra-hjerne/body)
 
 (provide 'hjerne)
-(defun hjerne-context-remove-dwim ()
-  "Remove context from a changeset using the current line in the active buffer."
-  (interactive)
-  (let ((filename (buffer-file-name))
-        (line (line-number-at-pos)))
-    (shell-command (format "%s %s/manage.py context_remove %d %s %d"
-                           hjerne-python-executable-path
-                           hjerne-install-path
-                           hjerne-changeset-id
-                           (shell-quote-argument filename)
-                           line))))
