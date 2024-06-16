@@ -150,6 +150,28 @@
                          hjerne-install-path
                          hjerne-changeset-id)))
 
+(defun hjerne-context-add-ag ()
+  "Add contexts from the current ag-mode buffer to the current changeset."
+  (interactive)
+  (unless hjerne-changeset-id
+    (error "hjerne-changeset-id is not set"))
+  (unless hjerne-install-path
+    (error "hjerne-install-path is not set"))
+  (unless (derived-mode-p 'ag-mode)
+    (error "This function must be run in an ag-mode buffer"))
+  (let ((project-root (ag/project-root default-directory)))
+    (save-excursion
+      (goto-char (point-min))
+      (while (re-search-forward "^\\(.*?\\):\\([0-9]+\\):" nil t)
+        (let ((file (expand-file-name (match-string 1) project-root))
+              (line (string-to-number (match-string 2))))
+          (shell-command (format "%s %s/manage.py context_add %d %s %d"
+                                 hjerne-python-executable-path
+                                 hjerne-install-path
+                                 hjerne-changeset-id
+                                 (shell-quote-argument file)
+                                 line)))))))
+
 (defun hjerne-context-remove-at-point ()
   "Remove context from a changeset using the current line in the active buffer."
   (interactive)
@@ -164,14 +186,6 @@
                            hjerne-install-path
                            hjerne-changeset-id
                            (shell-quote-argument (thing-at-point 'symbol))))))
-
-(defun hjerne-fetch-changesets (project-id)
-  "Fetch the list of changesets for a given project."
-  (let ((output (shell-command-to-string (format "%s %s/manage.py changeset_list %d"
-                                                 hjerne-python-executable-path
-                                                 hjerne-install-path
-                                                 project-id))))
-    (split-string output "\n" t)))
 
 (defun hjerne-fetch-projects ()
   "Fetch the list of projects."
