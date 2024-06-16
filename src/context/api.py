@@ -30,16 +30,6 @@ def top_level_symbol_in_range(file_path, row_from, row_to):
             return symbol
 
     raise Exception(f"No top level symbol found in {file_path} between lines {row_from} and {row_to}.")
-    file_path = os.path.abspath(os.path.expanduser(file_path))
-    _, tree, query = init_file(file_path)
-
-    for symbol in top_level_symbols(tree, query):
-        node = symbol['node']
-
-        if (node.start_point[0] <= row - 1 <= node.end_point[0]):
-            return symbol
-
-    raise Exception(f"No top level symbol found in {file_path} at line {row}.")
 
 def code_for_context(context):
     file_path = os.path.abspath(os.path.expanduser(context.file))
