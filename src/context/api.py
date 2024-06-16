@@ -19,17 +19,21 @@ def top_level_symbols(tree, query):
 
         yield {"node": top_level_node, "symbol_name": node.text.decode()}
 
-def top_level_symbol_in_range(file_path, row_from, row_to):
+def top_level_symbols_in_range(file_path, row_from, row_to):
     file_path = os.path.abspath(os.path.expanduser(file_path))
     _, tree, query = init_file(file_path)
 
+    symbols_in_range = []
     for symbol in top_level_symbols(tree, query):
         node = symbol['node']
 
         if (node.start_point[0] <= row_to - 1 and node.end_point[0] >= row_from - 1):
-            return symbol
+            symbols_in_range.append(symbol)
 
-    raise Exception(f"No top level symbol found in {file_path} between lines {row_from} and {row_to}.")
+    if not symbols_in_range:
+        raise Exception(f"No top level symbol found in {file_path} between lines {row_from} and {row_to}.")
+
+    return symbols_in_range
 
 def code_for_context(context):
     file_path = os.path.abspath(os.path.expanduser(context.file))
