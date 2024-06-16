@@ -165,11 +165,12 @@
                            hjerne-changeset-id
                            (shell-quote-argument (thing-at-point 'symbol))))))
 
-(defun hjerne-fetch-changesets ()
-  "Fetch the list of changesets."
-  (let ((output (shell-command-to-string (format "%s %s/manage.py changeset_list"
+(defun hjerne-fetch-changesets (project-id)
+  "Fetch the list of changesets for a given project."
+  (let ((output (shell-command-to-string (format "%s %s/manage.py changeset_list %d"
                                                  hjerne-python-executable-path
-                                                 hjerne-install-path))))
+                                                 hjerne-install-path
+                                                 project-id))))
     (split-string output "\n" t)))
 
 (defun hjerne-fetch-projects ()
@@ -191,10 +192,10 @@
       (setq hjerne-project-title project-title))
     (setq hjerne-changeset-id nil)))
     
-(defun hjerne-changeset-select ()
-  "Select a changeset and set `hjerne-changeset-id`."
-  (interactive)
-  (let* ((changesets (hjerne-fetch-changesets))
+(defun hjerne-changeset-select (project-id)
+  "Select a changeset for the given project and set `hjerne-changeset-id`."
+  (interactive (list hjerne-project-id))
+  (let* ((changesets (hjerne-fetch-changesets project-id))
          (selection (completing-read "Select changeset: " changesets)))
     (let* ((changeset-info (split-string selection " " t))
            (changeset-id (string-to-number (car changeset-info)))
