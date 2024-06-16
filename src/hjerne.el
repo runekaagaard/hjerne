@@ -151,7 +151,7 @@
   (let ((prefix "\n\nWhen working with the code below it's super important that you repeat the `## file:` lines above each markdown code block.\n\nFor now just give a short summary of it. Don't repeat the code back to me!\n\n")
         (code (with-temp-buffer
                 (insert-file-contents hjerne-replacement-file)
-                (buffer-string))))
+                (string-trim (buffer-string)))))
     (chatgpt-shell-send-to-buffer (concat prefix code))))
 
 (defun hjerne-receive-replacement-from-chatgpt-shell ()
