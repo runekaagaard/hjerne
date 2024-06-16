@@ -273,16 +273,25 @@
         (error "Failed to add project")))))
 
 (defun hjerne-context-remove-dwim ()
-  "Remove context from a changeset using the current line in the active buffer."
+  "Remove context from a changeset using the current line in the active buffer or a selected region."
   (interactive)
   (let ((filename (buffer-file-name))
-        (line (line-number-at-pos)))
-    (shell-command (format "%s %s/manage.py context_remove %d %s %d"
-                           hjerne-python-executable-path
-                           hjerne-install-path
-                           hjerne-changeset-id
-                           (shell-quote-argument filename)
-                           line))))
+        (start-line (if (use-region-p) (line-number-at-pos (region-beginning)) (line-number-at-pos (point))))
+        (end-line (if (use-region-p) (line-number-at-pos (region-end)) (line-number-at-pos (point)))))
+    (if (use-region-p)
+        (shell-command (format "%s %s/manage.py context_remove_range %d %s %d %d"
+                               hjerne-python-executable-path
+                               hjerne-install-path
+                               hjerne-changeset-id
+                               (shell-quote-argument filename)
+                               start-line
+                               end-line))
+      (shell-command (format "%s %s/manage.py context_remove %d %s %d"
+                             hjerne-python-executable-path
+                             hjerne-install-path
+                             hjerne-changeset-id
+                             (shell-quote-argument filename)
+                             start-line)))))
 
 (require 'hydra)
 
