@@ -133,3 +133,32 @@ def init_file(file_path, from_markdown=False):
         query = language.query(query_content)
 
         return parser, tree, query
+def init_files_from_markdown(file_path):
+    file_path = os.path.abspath(os.path.expanduser(file_path))
+    with open(file_path, 'r') as f:
+        source_code = f.read().encode()
+
+    import re
+    pattern = re.compile(r'```(\w+)(.*?)```', re.DOTALL)
+    matches = pattern.findall(source_code.decode())
+
+    results = []
+    for language_name, code in matches:
+        source_code = code.encode()
+
+        with warnings.catch_warnings():
+            warnings.simplefilter('ignore', FutureWarning)
+            language = get_language(language_name)
+
+            current_dir = os.path.dirname(__file__)
+            query_file_path = os.path.join(current_dir, f"queries/{language_name}.scm")
+            with open(query_file_path, 'r') as f:
+                query_content = f.read()
+
+            parser = get_parser(language_name)
+            tree = parser.parse(source_code)
+            query = language.query(query_content)
+
+            results.append((language_name, parser, tree, query))
+
+    return results
