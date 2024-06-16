@@ -220,6 +220,9 @@
 [_p_] Select       [_A_] Add         [_a_] Add         [_,_] chatgpt-shell send
 [_P_] Add          [_S_] Select      [_r_] Remove      [_._] chatgpt-shell receive
 ^ ^                [_C_] Clear       [_w_] Write       [_q_] Quit
+
+Project ID: %`hjerne-project-id
+Changeset ID: %`hjerne-changeset-id
 ^ ^                ^ ^               [_u_] Update
 
 [HERE]
