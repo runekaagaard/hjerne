@@ -25,7 +25,8 @@ class Command(BaseCommand):
             contexts_by_file[context.file].append(context)
 
         self.stdout.write(f"# {changeset.project.id} {changeset.project.title} - {changeset.id} {changeset.title}\n")
-        self.stdout.write(f"{changeset.description}\n")
+        if changeset.description:
+            self.stdout.write(f"{changeset.description}\n")
 
         files_by_language = {}
         for file, contexts in contexts_by_file.items():
@@ -41,5 +42,4 @@ class Command(BaseCommand):
                 for context in contexts:
                     code = code_for_context(context)
                     self.stdout.write(code)
-                    self.stdout.write("\n")
                 self.stdout.write(f"```\n")
