@@ -133,17 +133,19 @@ def init_file(file_path, from_markdown=False):
         query = language.query(query_content)
 
         return parser, tree, query
+
 def init_files_from_markdown(file_path):
     file_path = os.path.abspath(os.path.expanduser(file_path))
     with open(file_path, 'r') as f:
         source_code = f.read().encode()
 
     import re
-    pattern = re.compile(r'(?m)^#\s*file:\s*(.*?)\n```(\w+)(.*?)```', re.DOTALL)
+    pattern = re.compile(r'(?m)^## file: \s*(.*?)\n```(\w+)(.*?)```', re.DOTALL)
     matches = pattern.findall(source_code.decode())
 
     results = []
     for filename, language_name, code in matches:
+        filename = filename.replace("file: ", "").lstrip("# ").strip()
         source_code = code.encode()
 
         with warnings.catch_warnings():

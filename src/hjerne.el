@@ -90,7 +90,7 @@
   (unless hjerne-install-path
     (error "hjerne-install-path is not set"))
   (with-temp-buffer
-    (shell-command (format "%s %s/manage.py context_code %d"
+    (shell-command (format "%s %s/manage.py context_code_markdown %d"
                            hjerne-python-executable-path
                            hjerne-install-path
                            hjerne-changeset-id)

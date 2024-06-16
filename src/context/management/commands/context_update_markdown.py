@@ -25,13 +25,16 @@ class Command(BaseCommand):
             for filename, language_name, parser, tree, query in file_data:
                 if context.file == filename:
                     replacement_symbols = {
-                        symbol['symbol_name']: symbol['node'].text.decode() for symbol in top_level_symbols(tree, query)
+                        symbol['symbol_name']: symbol['node'].text.decode()
+                        for symbol in top_level_symbols(tree, query)
                     }
 
                     if context.symbol in replacement_symbols:
                         update_symbol(context.file, context.symbol, replacement_symbols[context.symbol])
-                        self.stdout.write(self.style.SUCCESS(f"Symbol '{context.symbol}' updated in file '{context.file}'!"))
+                        self.stdout.write(
+                            self.style.SUCCESS(f"Symbol '{context.symbol}' updated in file '{context.file}'"))
                     else:
-                        self.stdout.write(self.style.WARNING(f"Symbol '{context.symbol}' not found in file '{context.file}'"))
+                        self.stdout.write(
+                            self.style.WARNING(f"Symbol '{context.symbol}' not found in file '{context.file}'"))
 
         self.stdout.write(self.style.SUCCESS('Successfully updated context for changeset "%s"' % changeset_id))
