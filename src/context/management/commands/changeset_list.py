@@ -1,4 +1,5 @@
 from django.core.management.base import BaseCommand
+from django.core.management.base import BaseCommand, CommandError
 from context.models import Changeset, Project
 
 class Command(BaseCommand):
