@@ -11,8 +11,14 @@
 (defvar hjerne-project-id nil
   "ID of the current project. New changesets will be added to this project.")
 
+(defvar hjerne-project-title nil
+  "Title of the current project.")
+
 (defvar hjerne-changeset-id nil
   "ID of the current changeset.")
+
+(defvar hjerne-changeset-title nil
+  "Title of the current changeset.")
 
 (defvar hjerne-replacement-file nil
   "Path to the replacement file.")
@@ -55,7 +61,9 @@
                                                    hjerne-project-id
                                                    (shell-quote-argument title)))))
       (if (string-match "ID \\([0-9]+\\)" output)
-          (setq hjerne-changeset-id (string-to-number (match-string 1 output)))
+          (let ((changeset-id (string-to-number (match-string 1 output))))
+            (setq hjerne-changeset-id changeset-id)
+            (setq hjerne-changeset-title title))
         (error "Failed to add changeset")))))
 
 (defun hjerne-context-add ()
@@ -176,7 +184,11 @@
   (interactive)
   (let* ((projects (hjerne-fetch-projects))
          (selection (completing-read "Select project: " projects)))
-    (setq hjerne-project-id (string-to-number (car (split-string selection " "))))
+    (let* ((project-info (split-string selection " " t))
+           (project-id (string-to-number (car project-info)))
+           (project-title (mapconcat 'identity (cdr project-info) " ")))
+      (setq hjerne-project-id project-id)
+      (setq hjerne-project-title project-title))
     (setq hjerne-changeset-id nil)))
     
 (defun hjerne-changeset-select ()
@@ -184,7 +196,11 @@
   (interactive)
   (let* ((changesets (hjerne-fetch-changesets))
          (selection (completing-read "Select changeset: " changesets)))
-    (setq hjerne-changeset-id (string-to-number (car (split-string selection " "))))))
+    (let* ((changeset-info (split-string selection " " t))
+           (changeset-id (string-to-number (car changeset-info)))
+           (changeset-title (mapconcat 'identity (cdr changeset-info) " ")))
+      (setq hjerne-changeset-id changeset-id)
+      (setq hjerne-changeset-title changeset-title))))
 
 (defun hjerne-get-current-git-branch ()
   "Get the current git branch name."
@@ -206,7 +222,9 @@
                                                    (shell-quote-argument description)))))
       (if (string-match "ID \\([0-9]+\\)" output)
           (progn
-            (setq hjerne-project-id (string-to-number (match-string 1 output)))
+            (let ((project-id (string-to-number (match-string 1 output))))
+              (setq hjerne-project-id project-id)
+              (setq hjerne-project-title title))
             (setq hjerne-changeset-id nil))
         (error "Failed to add project")))))
 
@@ -223,7 +241,9 @@
 ^ ^                ^ ^               [_u_] Update
 
 Project ID: %`hjerne-project-id
+Project Title: %`hjerne-project-title
 Changeset ID: %`hjerne-changeset-id
+Changeset Title: %`hjerne-changeset-title
 "
   ("p" hjerne-project-select)
   ("P" hjerne-project-add)
