@@ -159,7 +159,6 @@ To use Hjerne with Emacs, add the following to your `init.el` file:
 Project: %`hjerne-project-id %s`hjerne-project-title
 Changeset: %`hjerne-changeset-id %s`hjerne-changeset-title
 ```
-```
 
 ## Getting Started
 
