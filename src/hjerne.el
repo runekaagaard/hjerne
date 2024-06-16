@@ -162,15 +162,16 @@
   (let ((project-root (ag/project-root default-directory)))
     (save-excursion
       (goto-char (point-min))
-      (while (re-search-forward "^\\(.*?\\):\\([0-9]+\\):" nil t)
+      (while (re-search-forward "^\\([^:]+\\):\\([0-9]+\\):" nil t)
         (let ((file (expand-file-name (match-string 1) project-root))
               (line (string-to-number (match-string 2))))
-          (shell-command (format "%s %s/manage.py context_add %d %s %d"
-                                 hjerne-python-executable-path
-                                 hjerne-install-path
-                                 hjerne-changeset-id
-                                 (shell-quote-argument file)
-                                 line)))))))
+          (when (file-exists-p file)
+            (shell-command (format "%s %s/manage.py context_add %d %s %d"
+                                   hjerne-python-executable-path
+                                   hjerne-install-path
+                                   hjerne-changeset-id
+                                   (shell-quote-argument file)
+                                   line))))))))
 
 (defun hjerne-context-remove-at-point ()
   "Remove context from a changeset using the current line in the active buffer."
