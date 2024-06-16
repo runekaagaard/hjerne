@@ -18,4 +18,4 @@ class Command(BaseCommand):
             raise CommandError('Project "%s" does not exist' % project_id)
 
         changeset = Changeset.objects.create(project=project, title=title)
-        self.stdout.write(self.style.SUCCESS('Successfully added changeset "%s" to project "%s"' % (title, project.title)))
+        self.stdout.write(self.style.SUCCESS('Successfully added changeset "%s" to project "%s" with ID %d' % (title, project.title, changeset.id)))

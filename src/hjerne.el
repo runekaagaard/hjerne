@@ -49,11 +49,14 @@
                                  (format "Enter changeset title (default: %s): " default-title)
                                "Enter changeset title: ")
                              nil nil default-title)))
-    (shell-command (format "%s %s/manage.py changeset_add %d %s"
-                           hjerne-python-executable-path
-                           hjerne-install-path
-                           hjerne-project-id
-                           (shell-quote-argument title)))))
+    (let ((output (shell-command-to-string (format "%s %s/manage.py changeset_add %d %s"
+                                                   hjerne-python-executable-path
+                                                   hjerne-install-path
+                                                   hjerne-project-id
+                                                   (shell-quote-argument title)))))
+      (if (string-match "ID \\([0-9]+\\)" output)
+          (setq hjerne-changeset-id (string-to-number (match-string 1 output)))
+        (error "Failed to add changeset")))))
 
 (defun hjerne-context-add ()
   "Add context to a changeset using the current line in the active buffer."
