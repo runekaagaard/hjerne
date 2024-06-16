@@ -8,7 +8,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('changeset_id', type=int, help='The ID of the changeset')
         parser.add_argument('replacement_file', type=str, help='The path to the replacement file')
-        parser.add_argument('--from-markdown', action='store_false', help='Extract code from markdown blocks')
+        parser.add_argument('--from-markdown', action='store_true', help='Extract code from markdown blocks')
 
     def handle(self, *args, **kwargs):
         changeset_id = kwargs['changeset_id']
