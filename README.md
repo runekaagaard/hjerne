@@ -69,6 +69,14 @@ Usage:
 python manage.py context_add <changeset_id> <filename> <linenumber>
 ```
 
+### `context_add_range`
+Adds contexts to a changeset for a given range of lines in a file.
+
+Usage:
+```sh
+python manage.py context_add_range <changeset_id> <file_path> <from_line> <to_line>
+```
+
 ### `context_remove`
 
 Removes a context from a changeset.
@@ -81,6 +89,14 @@ python manage.py context_remove <changeset_id> <filename> <linenumber>
 ### `context_update`
 
 Updates the context for a given changeset.
+
+### `treesitter_top_level_symbols_in_range`
+Outputs top-level symbols in a given range for a given file using Tree-sitter.
+
+Usage:
+```sh
+python manage.py treesitter_top_level_symbols_in_range <file_path> <row_from> <row_to>
+```
 
 Usage:
 ```sh
