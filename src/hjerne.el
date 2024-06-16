@@ -96,7 +96,8 @@
                            hjerne-install-path
                            hjerne-changeset-id)
                    (current-buffer))
-    (write-region (point-min) (point-max) hjerne-replacement-file)))
+    (write-region (point-min) (point-max) hjerne-replacement-file))
+  (find-file hjerne-replacement-file))
 
 (defun hjerne-context-update (&optional custom-replacement-file from-markdown)
   "Update the context for a given changeset. Optionally use a custom replacement file and extract code from markdown."
