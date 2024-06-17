@@ -1,0 +1,9 @@
+function tFunction1_3() {
+    return 42
+}
+
+class tClass5_9 {
+    foo() {
+	return 42
+    }
+}
