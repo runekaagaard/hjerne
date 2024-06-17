@@ -160,6 +160,8 @@
                                        hjerne-changeset-id)
                                (current-buffer))
                 (buffer-string))))
+    (with-current-buffer (get-buffer "*chatgpt-shell*")
+      (comint-clear-buffer))
     (chatgpt-shell-send-to-buffer (concat prefix code))))
 
 (defun hjerne-receive-replacement-from-chatgpt-shell ()
