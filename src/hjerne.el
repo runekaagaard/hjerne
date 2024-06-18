@@ -240,7 +240,7 @@
          (selection (completing-read "Select project: " projects)))
     (let* ((project-info (split-string selection " " t))
            (project-id (string-to-number (car project-info)))
-           (project-title (mapconcat 'identity (cdr project_info) " ")))
+           (project-title (mapconcat 'identity (cdr project-info) " ")))
       (setq hjerne-project-id project-id)
       (setq hjerne-project-title project-title))
     (setq hjerne-changeset-id nil)))
