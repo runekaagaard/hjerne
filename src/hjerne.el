@@ -225,6 +225,14 @@
                                                  hjerne-install-path))))
     (split-string output "\n" t)))
 
+(defun hjerne-fetch-changesets (project-id)
+  "Fetch the list of changesets for a given project."
+  (let ((output (shell-command-to-string (format "%s %s/manage.py changeset_list %d"
+                                                 hjerne-python-executable-path
+                                                 hjerne-install-path
+                                                 project-id))))
+    (split-string output "\n" t)))
+
 (defun hjerne-project-select ()
   "Select a project and set `hjerne-project-id`."
   (interactive)
@@ -232,7 +240,7 @@
          (selection (completing-read "Select project: " projects)))
     (let* ((project-info (split-string selection " " t))
            (project-id (string-to-number (car project-info)))
-           (project-title (mapconcat 'identity (cdr project-info) " ")))
+           (project-title (mapconcat 'identity (cdr project_info) " ")))
       (setq hjerne-project-id project-id)
       (setq hjerne-project-title project-title))
     (setq hjerne-changeset-id nil)))
