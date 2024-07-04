@@ -138,8 +138,9 @@
                          hjerne-changeset-id
                          replacement-file)))
 
-(defun hjerne-send-context-code-to-chatgpt-shell ()
-  "Send context code to ChatGPT shell with a prefix message."
+(defun hjerne-send-context-code-to-chatgpt-shell (&optional handler)
+  "Send context code to ChatGPT shell with a prefix message.
+If HANDLER is provided, it will be called after the response is received."
   (interactive)
   (unless hjerne-changeset-id
     (error "hjerne-changeset-id is not set"))
@@ -159,7 +160,14 @@
         (setq chatgpt-buffer (car (seq-filter (lambda (buf) (string-prefix-p "*chatgpt" (buffer-name buf))) (buffer-list)))))
       (with-current-buffer chatgpt-buffer
         (comint-clear-buffer)
-        (chatgpt-shell-send-to-buffer (concat prefix code))))))
+        (chatgpt-shell-send-to-buffer (concat prefix code))
+        (when handler
+          (add-hook 'comint-output-filter-functions
+                    (lambda (output)
+                      (when (string-match-p "^Human: " output)
+                        (remove-hook 'comint-output-filter-functions handler)
+                        (funcall handler)))
+                    nil t))))))
 
 (defun hjerne-receive-replacement-from-chatgpt-shell ()
   "Receive replacement from ChatGPT shell, update context, and regenerate context code."
@@ -171,17 +179,11 @@
     (let ((hjerne-replacement-file temp-replacement-file))
       (hjerne-context-update-markdown-todo hjerne-replacement-file))))
 
-(defun hjerne-chatgpt-shell-intercept (output)
-  "Intercept chatgpt-shell output and process it with hjerne."
-  (when (eq major-mode 'chatgpt-shell-mode)
-    (message "6666666666666666666666")
-    (message output)
-    (hjerne-receive-replacement-from-chatgpt-shell output)
-  )
-)
+(defun hjerne-send-and-receive-context ()
+  "Send context code to ChatGPT and automatically receive the replacement."
+  (interactive)
+  (hjerne-send-context-code-to-chatgpt-shell #'hjerne-receive-replacement-from-chatgpt-shell))
 
-(advice-add 'comint-output-filter :filter-return #'hjerne-chatgpt-shell-intercept)
-(advice-add 'chatgpt-shell-output-filter :after #'hjerne-chatgpt-shell-intercept)
 
 (defun hjerne-changeset-clear-context ()
   "Clear all contexts in the current changeset."
