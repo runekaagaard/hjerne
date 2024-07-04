@@ -160,9 +160,13 @@
                                        hjerne-changeset-id)
                                (current-buffer))
                 (buffer-string))))
-    (with-current-buffer (get-buffer (car (seq-filter (lambda (buf) (string-prefix-p "*chatgpt" (buffer-name buf))) (buffer-list))))
-      (comint-clear-buffer))
-    (chatgpt-shell-send-to-buffer (concat prefix code))))
+    (let ((chatgpt-buffer (car (seq-filter (lambda (buf) (string-prefix-p "*chatgpt" (buffer-name buf))) (buffer-list)))))
+      (unless chatgpt-buffer
+        (chatgpt-shell)
+        (setq chatgpt-buffer (car (seq-filter (lambda (buf) (string-prefix-p "*chatgpt" (buffer-name buf))) (buffer-list)))))
+      (with-current-buffer chatgpt-buffer
+        (comint-clear-buffer)
+        (chatgpt-shell-send-to-buffer (concat prefix code))))))
 
 (defun hjerne-receive-replacement-from-chatgpt-shell ()
   "Receive replacement from ChatGPT shell, update context, and regenerate context code."
