@@ -178,6 +178,15 @@
     (let ((hjerne-replacement-file temp-replacement-file))
       (hjerne-context-update-markdown-todo hjerne-replacement-file))))
 
+(defun hjerne-chatgpt-shell-intercept (output)
+  "Intercept chatgpt-shell output and process it with hjerne."
+  (when (and (boundp 'chatgpt-shell-prompt-regexp)
+             (string-match chatgpt-shell-prompt-regexp output))
+    (run-with-timer 0 nil #'hjerne-receive-replacement-from-chatgpt-shell))
+  output)
+
+(advice-add 'chatgpt-shell-output-filter :filter-return #'hjerne-chatgpt-shell-intercept)
+
 (defun hjerne-changeset-clear-context ()
   "Clear all contexts in the current changeset."
   (interactive)
