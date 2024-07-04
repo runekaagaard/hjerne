@@ -26,16 +26,9 @@
 ;; Helpers
 
 (defun hjerne-shell-maker-get-prompt-content ()
-  "Get the content of the command line (and any following command output) at point."
-  (let ((begin (shell-maker--prompt-begin-position)))
-    (buffer-substring-no-properties
-     begin
-     (save-excursion
-       (goto-char (shell-maker--prompt-end-position))
-       (re-search-forward (shell-maker-prompt-regexp shell-maker--config) nil t)
-       (if (= begin (shell-maker--prompt-begin-position))
-           (point-max)
-         (shell-maker--prompt-begin-position))))))
+  "Get the content of the response at point in the chatgpt-shell buffer."
+  (or (shell-maker-get-response-at-point)
+      (error "No response found at point")))
 
 (defun hjerne-get-current-git-branch ()
   "Get the current git branch name."
