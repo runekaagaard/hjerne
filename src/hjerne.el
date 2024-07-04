@@ -180,6 +180,16 @@
 
 (defun hjerne-chatgpt-shell-intercept (output)
   "Intercept chatgpt-shell output and process it with hjerne."
+  (when (and (boundp 'chatgpt-shell-mode)
+             (eq major-mode 'chatgpt-shell-mode)
+             (not shell-maker--busy))
+    (run-with-timer 0 nil #'hjerne-receive-replacement-from-chatgpt-shell))
+  output)
+
+(advice-add 'comint-output-filter :filter-return #'hjerne-chatgpt-shell-intercept)
+
+(defun hjerne-chatgpt-shell-intercept (output)
+  "Intercept chatgpt-shell output and process it with hjerne."
   (when (and (boundp 'chatgpt-shell-prompt-regexp)
              (string-match chatgpt-shell-prompt-regexp output))
     (run-with-timer 0 nil #'hjerne-receive-replacement-from-chatgpt-shell))
