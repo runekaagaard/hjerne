@@ -9,3 +9,10 @@
   (expression_statement
     (assignment
       left: (identifier) @symbol.name))
+
+  ; Match top-level attribute assignments
+  (expression_statement
+    (assignment
+      left: (attribute
+        object: (attribute
+          object: (identifier) @symbol.name))))
