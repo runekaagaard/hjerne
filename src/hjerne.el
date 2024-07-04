@@ -178,7 +178,7 @@
     (run-with-timer 0.1 nil #'hjerne-receive-replacement-from-chatgpt-shell))
   output)
 
-(advice-add 'chatgpt-shell-output-filter :filter-return #'hjerne-chatgpt-shell-intercept)
+(advice-add 'chatgpt-shell-output-filter :after #'hjerne-chatgpt-shell-intercept)
 
 (defun hjerne-changeset-clear-context ()
   "Clear all contexts in the current changeset."
