@@ -11,13 +11,13 @@
 (defvar hjerne-project-id nil
   "ID of the current project. New changesets will be added to this project.")
 
-(defvar hjerne-project-title nil
+(defvar hjerne-project-title "N/A"
   "Title of the current project.")
 
 (defvar hjerne-changeset-id nil
   "ID of the current changeset.")
 
-(defvar hjerne-changeset-title nil
+(defvar hjerne-changeset-title "N/A"
   "Title of the current changeset.")
 
 (defvar hjerne-replacement-file nil
