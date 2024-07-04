@@ -26,9 +26,16 @@
 ;; Helpers
 
 (defun hjerne-shell-maker-get-prompt-content ()
-  "Get the content of the response at point in the chatgpt-shell buffer."
-  (or (shell-maker-get-response-at-point)
-      (error "No response found at point")))
+  "Get the content of the command line (and any following command output) at point."
+  (let ((begin (shell-maker--prompt-begin-position)))
+    (buffer-substring-no-properties
+     begin
+     (save-excursion
+       (goto-char (shell-maker--prompt-end-position))
+       (re-search-forward (shell-maker-prompt-regexp shell-maker--config) nil t)
+       (if (= begin (shell-maker--prompt-begin-position))
+           (point-max)
+         (shell-maker--prompt-begin-position))))))
 
 (defun hjerne-get-current-git-branch ()
   "Get the current git branch name."
@@ -138,9 +145,8 @@
                          hjerne-changeset-id
                          replacement-file)))
 
-(defun hjerne-send-context-code-to-chatgpt-shell (&optional handler)
-  "Send context code to ChatGPT shell with a prefix message.
-If HANDLER is provided, it will be called after the response is received."
+(defun hjerne-send-context-code-to-chatgpt-shell ()
+  "Send context code to ChatGPT shell with a prefix message."
   (interactive)
   (unless hjerne-changeset-id
     (error "hjerne-changeset-id is not set"))
@@ -160,14 +166,7 @@ If HANDLER is provided, it will be called after the response is received."
         (setq chatgpt-buffer (car (seq-filter (lambda (buf) (string-prefix-p "*chatgpt" (buffer-name buf))) (buffer-list)))))
       (with-current-buffer chatgpt-buffer
         (comint-clear-buffer)
-        (chatgpt-shell-send-to-buffer (concat prefix code))
-        (when handler
-          (add-hook 'comint-output-filter-functions
-                    (lambda (output)
-                      (when (string-match-p "^Human: " output)
-                        (remove-hook 'comint-output-filter-functions handler)
-                        (funcall handler)))
-                    nil t))))))
+        (chatgpt-shell-send-to-buffer (concat prefix code))))))
 
 (defun hjerne-receive-replacement-from-chatgpt-shell ()
   "Receive replacement from ChatGPT shell, update context, and regenerate context code."
@@ -178,12 +177,6 @@ If HANDLER is provided, it will be called after the response is received."
       (insert content))
     (let ((hjerne-replacement-file temp-replacement-file))
       (hjerne-context-update-markdown-todo hjerne-replacement-file))))
-
-(defun hjerne-send-and-receive-context ()
-  "Send context code to ChatGPT and automatically receive the replacement."
-  (interactive)
-  (hjerne-send-context-code-to-chatgpt-shell #'hjerne-receive-replacement-from-chatgpt-shell))
-
 
 (defun hjerne-changeset-clear-context ()
   "Clear all contexts in the current changeset."
