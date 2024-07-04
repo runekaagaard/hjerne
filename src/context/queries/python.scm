@@ -13,6 +13,4 @@
   ; Match top-level attribute assignments
   (expression_statement
     (assignment
-      left: (attribute
-        object: (attribute
-          object: (identifier) @symbol.name))))
+      left: (attribute) @symbol.name))
