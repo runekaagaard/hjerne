@@ -173,14 +173,12 @@
 
 (defun hjerne-chatgpt-shell-intercept (output)
   "Intercept chatgpt-shell output and process it with hjerne."
-  (when (eq major-mode 'chatgpt-shell-mode)
-    (message "6666666666666666666666")
-    (message output)
-    (hjerne-receive-replacement-from-chatgpt-shell output)
-  )
-)
+  (when (and (eq major-mode 'chatgpt-shell-mode)
+             (string-match-p "^Human: " output))
+    (run-with-timer 0.1 nil #'hjerne-receive-replacement-from-chatgpt-shell))
+  output)
 
-(advice-add 'comint-output-filter :filter-return #'hjerne-chatgpt-shell-intercept)
+(advice-add 'chatgpt-shell-output-filter :filter-return #'hjerne-chatgpt-shell-intercept)
 
 (defun hjerne-changeset-clear-context ()
   "Clear all contexts in the current changeset."
