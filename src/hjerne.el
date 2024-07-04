@@ -25,18 +25,6 @@
 
 ;; Helpers
 
-(defun hjerne-shell-maker-get-prompt-content ()
-  "Get the content of the command line (and any following command output) at point."
-  (let ((begin (shell-maker--prompt-begin-position)))
-    (buffer-substring-no-properties
-     begin
-     (save-excursion
-       (goto-char (shell-maker--prompt-end-position))
-       (re-search-forward (shell-maker-prompt-regexp shell-maker--config) nil t)
-       (if (= begin (shell-maker--prompt-begin-position))
-           (point-max)
-         (shell-maker--prompt-begin-position))))))
-
 (defun hjerne-get-current-git-branch ()
   "Get the current git branch name."
   (let ((branch (string-trim (shell-command-to-string "git rev-parse --abbrev-ref HEAD"))))
@@ -145,6 +133,11 @@
                          hjerne-changeset-id
                          replacement-file)))
 
+(defun add-chatgpt-output-listener-once ()
+  "Add the hook to listen to ChatGPT output, but only once."
+  (unless (member 'hjerne-receive-replacement-from-chatgpt-shell comint-output-filter-functions)
+    (add-hook 'comint-output-filter-functions #'hjerne-receive-replacement-from-chatgpt-shell nil t)))
+
 (defun hjerne-send-context-code-to-chatgpt-shell ()
   "Send context code to ChatGPT shell with a prefix message."
   (interactive)
@@ -165,14 +158,15 @@
         (chatgpt-shell)
         (setq chatgpt-buffer (car (seq-filter (lambda (buf) (string-prefix-p "*chatgpt" (buffer-name buf))) (buffer-list)))))
       (with-current-buffer chatgpt-buffer
+        (add-chatgpt-output-listener-once)
         (comint-clear-buffer)
         (chatgpt-shell-send-to-buffer (concat prefix code))))))
 
-(defun hjerne-receive-replacement-from-chatgpt-shell ()
+(defun hjerne-receive-replacement-from-chatgpt-shell (&optional not-used)
   "Receive replacement from ChatGPT shell, update context, and regenerate context code."
   (interactive)
   (let ((temp-replacement-file (make-temp-file "hjerne-replacement-"))
-        (content (hjerne-shell-maker-get-prompt-content)))
+        (content (shell-maker-last-output)))
     (with-temp-file temp-replacement-file
       (insert content))
     (let ((hjerne-replacement-file temp-replacement-file))
@@ -306,6 +300,11 @@
                              hjerne-changeset-id
                              (shell-quote-argument filename)
                              start-line)))))
+
+;; (add-hook `chatgpt-shell-after-command-functions'
+;;    (lambda (command output)
+;;      (message \"Command: %s\" command)
+;;      (message \"Output: %s\" output)))
 
 (require 'hydra)
 
