@@ -24,6 +24,10 @@ class SomeClass:
 def test_merge_python_imports(sample_src_code, sample_dest_code):
     result = merge_python_imports(sample_src_code, sample_dest_code)
     
+    print("\nMerged Python Imports Result:")
+    print(result)
+    print("\n")  # Add an extra newline for clarity in the output
+    
     # Check that all original imports are preserved
     assert "import sys" in result
     assert "from django.http import HttpResponse" in result
