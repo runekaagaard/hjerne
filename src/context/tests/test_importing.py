@@ -1,5 +1,5 @@
 import pytest
-from context.importing import merge_python_imports
+from ..importing import merge_python_imports
 
 @pytest.fixture
 def sample_src_code():
