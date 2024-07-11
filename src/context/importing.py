@@ -3,9 +3,8 @@ from typing import List, Tuple
 
 def merge_python_imports(src_code: str, destination_code: str) -> str:
     """
-    Extracts top level import statements in the src_code and merges them into the destination_code. If a symbol is
-    already imported from a module, we insert new imports in the same import statement. Otherwise after the last
-    top level import statement.
+    Extracts top level import statements in the src_code and merges them into the destination_code.
+    Returns only the merged import statements as a string.
     """
     import inspect
     current_function = inspect.currentframe().f_back.f_code.co_name
@@ -17,11 +16,11 @@ def merge_python_imports(src_code: str, destination_code: str) -> str:
     dest_imports = extract_imports(dest_tree)
 
     if not src_imports and not dest_imports:
-        return destination_code
+        return ""
 
     merged_imports = merge_imports(src_imports, dest_imports)
 
-    result = insert_imports(destination_code, merged_imports)
+    result = "\n".join(ast.unparse(imp) for imp in merged_imports)
     print("Merge result:")
     print(result)
     print()  # Add an extra newline for clarity
