@@ -33,7 +33,13 @@ def merge_imports(src_imports: List[ast.Import], dest_imports: List[ast.Import])
 
 def merge_import(src_import: ast.Import, dest_imports: List[ast.Import]) -> List[ast.Import]:
     for alias in src_import.names:
-        if not any(isinstance(imp, ast.Import) and alias.name in [a.name for a in imp.names] for imp in dest_imports):
+        existing_import = next((imp for imp in dest_imports if isinstance(imp, ast.Import) and any(a.name == alias.name for a in imp.names)), None)
+        if existing_import:
+            existing_alias = next(a for a in existing_import.names if a.name == alias.name)
+            if alias.asname and alias.asname != existing_alias.asname:
+                existing_import.names.remove(existing_alias)
+                existing_import.names.append(alias)
+        else:
             dest_imports.append(ast.Import(names=[alias]))
     return dest_imports
 
@@ -42,12 +48,7 @@ def merge_import_from(src_import: ast.ImportFrom, dest_imports: List[ast.Import]
         if isinstance(dest_import, ast.ImportFrom) and dest_import.module == src_import.module:
             new_names = [alias for alias in src_import.names if alias.name not in [a.name for a in dest_import.names]]
             if new_names:
-                if len(dest_import.names) + len(new_names) > 1:
-                    dest_import.names = [ast.alias(name='(')]
-                    dest_import.names.extend(dest_import.names + new_names)
-                    dest_import.names.append(ast.alias(name=')'))
-                else:
-                    dest_import.names.extend(new_names)
+                dest_import.names.extend(new_names)
             return dest_imports
     dest_imports.append(src_import)
     return dest_imports
@@ -66,4 +67,4 @@ def insert_imports(code: str, imports: List[ast.Import]) -> str:
     if last_import_index == -1:
         return '\n'.join(import_lines + [''] + lines)
     else:
-        return '\n'.join(import_lines + [''] + lines)
+        return '\n'.join(lines[:last_import_index + 1] + [''] + import_lines + [''] + lines[last_import_index + 1:])
