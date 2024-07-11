@@ -89,4 +89,4 @@ import module2
     assert "func3," in result
     assert ")" in result
     assert "import module2 as m2" in result
-    assert "import module2\n" not in result  # This should be replaced by the 'as' import
+    assert "import module2" not in result  # This should be replaced by the 'as' import

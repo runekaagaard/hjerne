@@ -72,8 +72,13 @@ def merge_import_from(src_import: ast.ImportFrom, dest_imports: List[ast.Import]
         # Preserve parentheses if present in the original import
         if any(hasattr(n, 'lineno') for n in src_import.names):
             existing_import.names = [ast.alias(name=n.name, asname=n.asname, lineno=n.lineno if hasattr(n, 'lineno') else None) for n in existing_import.names]
+        
+        # Set the col_offset to 0 to force parentheses in the output
+        existing_import.col_offset = 0
     else:
         dest_imports.append(src_import)
+        # Set the col_offset to 0 for the new import as well
+        src_import.col_offset = 0
     return dest_imports
 
 def insert_imports(code: str, imports: List[ast.Import]) -> str:
