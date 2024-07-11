@@ -133,11 +133,6 @@
                          hjerne-changeset-id
                          replacement-file)))
 
-(defun add-chatgpt-output-listener-once ()
-  "Add the hook to listen to ChatGPT output, but only once."
-  (unless (member 'hjerne-receive-replacement-from-chatgpt-shell comint-output-filter-functions)
-    (add-hook 'comint-output-filter-functions #'hjerne-receive-replacement-from-chatgpt-shell nil t)))
-
 (defun hjerne-send-context-code-to-chatgpt-shell ()
   "Send context code to ChatGPT shell with a prefix message."
   (interactive)
@@ -158,19 +153,18 @@
         (chatgpt-shell)
         (setq chatgpt-buffer (car (seq-filter (lambda (buf) (string-prefix-p "*chatgpt" (buffer-name buf))) (buffer-list)))))
       (with-current-buffer chatgpt-buffer
-        (add-chatgpt-output-listener-once)
         (comint-clear-buffer)
         (chatgpt-shell-send-to-buffer (concat prefix code))))))
 
-(defun hjerne-receive-replacement-from-chatgpt-shell (&optional not-used)
+(defun hjerne-receive-replacement-from-chatgpt-shell (command output)
   "Receive replacement from ChatGPT shell, update context, and regenerate context code."
-  (interactive)
-  (let ((temp-replacement-file (make-temp-file "hjerne-replacement-"))
-        (content (shell-maker-last-output)))
+  (let ((temp-replacement-file (make-temp-file "hjerne-replacement-")))
     (with-temp-file temp-replacement-file
-      (insert content))
+      (insert output))
     (let ((hjerne-replacement-file temp-replacement-file))
       (hjerne-context-update-markdown-todo hjerne-replacement-file))))
+
+(add-hook 'chatgpt-shell-after-command-functions #'hjerne-receive-replacement-from-chatgpt-shell)
 
 (defun hjerne-changeset-clear-context ()
   "Clear all contexts in the current changeset."
@@ -301,10 +295,6 @@
                              (shell-quote-argument filename)
                              start-line)))))
 
-;; (add-hook `chatgpt-shell-after-command-functions'
-;;    (lambda (command output)
-;;      (message \"Command: %s\" command)
-;;      (message \"Output: %s\" output)))
 
 (require 'hydra)
 
