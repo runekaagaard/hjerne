@@ -5,6 +5,7 @@ def merge_python_imports(src_code: str, destination_code: str, debug: bool = Fal
     """
     Extracts top level import statements in the src_code and merges them into the destination_code.
     Returns the merged import statements followed by the non-import code from the destination.
+    If there are no imports, returns an empty string.
     """
     if debug:
         print(f"Source code:\n{src_code}\n")
@@ -18,12 +19,12 @@ def merge_python_imports(src_code: str, destination_code: str, debug: bool = Fal
 
     merged_imports = merge_imports(src_imports, dest_imports)
 
-    # Get non-import code from destination
-    non_import_code = [ast.unparse(node) for node in dest_tree.body if not isinstance(node, (ast.Import, ast.ImportFrom))]
+    if not merged_imports:
+        if debug:
+            print("No imports found. Returning empty string.\n")
+        return ""
 
     result = "\n".join(ast.unparse(imp) for imp in merged_imports)
-    if non_import_code:
-        result += "\n\n" + "\n".join(non_import_code)
     
     if debug:
         print(f"Merge result:\n{result}\n")

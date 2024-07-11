@@ -67,7 +67,7 @@ def test_merge_python_imports_with_no_imports():
     dest_code = "class SomeClass:\n    pass\n"
     result = merge_python_imports(src_code, dest_code, debug=True)
     
-    assert result == dest_code  # No changes should be made
+    assert result == ""  # Should return an empty string
 
 def test_merge_python_imports_with_complex_imports():
     src_code = """
