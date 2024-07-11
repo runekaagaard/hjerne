@@ -68,6 +68,10 @@ def merge_import_from(src_import: ast.ImportFrom, dest_imports: List[ast.Import]
         new_names = [alias for alias in src_import.names if alias.name not in existing_names]
         existing_import.names.extend(new_names)
         existing_import.names.sort(key=lambda x: x.name)
+        
+        # Preserve parentheses if present in the original import
+        if any(hasattr(n, 'lineno') for n in src_import.names):
+            existing_import.names = [ast.alias(name=n.name, asname=n.asname, lineno=n.lineno if hasattr(n, 'lineno') else None) for n in existing_import.names]
     else:
         dest_imports.append(src_import)
     return dest_imports
