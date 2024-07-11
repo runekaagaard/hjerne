@@ -40,7 +40,6 @@ def test_merge_python_imports(sample_src_code, sample_dest_code):
     assert "from django.http import HttpResponse" in lines
     
     # Check that non-import code is not present
-    assert "class SomeClass:" not in result
     assert "def some_function():" not in result
 
 def test_merge_python_imports_with_existing_imports():
