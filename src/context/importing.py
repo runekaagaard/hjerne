@@ -7,6 +7,9 @@ def merge_python_imports(src_code: str, destination_code: str) -> str:
     already imported from a module, we insert new imports in the same import statement. Otherwise after the last
     top level import statement.
     """
+    import inspect
+    current_function = inspect.currentframe().f_back.f_code.co_name
+    print(f"\nCalled from: {current_function}")
     src_tree = ast.parse(src_code)
     dest_tree = ast.parse(destination_code)
 
@@ -18,7 +21,11 @@ def merge_python_imports(src_code: str, destination_code: str) -> str:
 
     merged_imports = merge_imports(src_imports, dest_imports)
 
-    return insert_imports(destination_code, merged_imports)
+    result = insert_imports(destination_code, merged_imports)
+    print("Merge result:")
+    print(result)
+    print()  # Add an extra newline for clarity
+    return result
 
 def extract_imports(tree: ast.AST) -> List[ast.Import]:
     return [node for node in tree.body if isinstance(node, (ast.Import, ast.ImportFrom))]
