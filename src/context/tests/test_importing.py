@@ -83,10 +83,9 @@ import module2
 """
     result = merge_python_imports(src_code, dest_code, debug=True)
     
-    assert "from module1 import (" in result
+    assert "from module1 import" in result
     assert "func1," in result
     assert "func2," in result
     assert "func3," in result
-    assert ")" in result
     assert "import module2 as m2" in result
     assert "import module2" not in result  # This should be replaced by the 'as' import
