@@ -49,8 +49,10 @@ def merge_import(src_import: ast.Import, dest_imports: List[ast.Import]) -> List
         if existing_import:
             existing_alias = next(a for a in existing_import.names if a.name == alias.name)
             if alias.asname and alias.asname != existing_alias.asname:
-                existing_import.names.remove(existing_alias)
-                existing_import.names.append(alias)
+                # If the new import has an alias and it's different from the existing one,
+                # we keep both imports
+                dest_imports.append(ast.Import(names=[alias]))
+            # If the aliases are the same or there's no new alias, we don't need to do anything
         else:
             dest_imports.append(ast.Import(names=[alias]))
     return dest_imports
