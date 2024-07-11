@@ -13,3 +13,4 @@ manage.py
 Makefile
 .aider*
 changeset.py
+.gitignore
