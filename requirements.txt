@@ -2,3 +2,4 @@ django
 aider-chat
 tree_sitter_languages
 tree-sitter==0.21.3
+pytest
