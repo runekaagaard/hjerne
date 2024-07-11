@@ -13,6 +13,9 @@ def merge_python_imports(src_code: str, destination_code: str) -> str:
     src_imports = extract_imports(src_tree)
     dest_imports = extract_imports(dest_tree)
 
+    if not src_imports and not dest_imports:
+        return destination_code
+
     merged_imports = merge_imports(src_imports, dest_imports)
 
     return insert_imports(destination_code, merged_imports)
@@ -26,17 +29,12 @@ def extract_imports(tree: ast.AST) -> List[ast.Import]:
 def merge_imports(src_imports: List[ast.Import], dest_imports: List[ast.Import]) -> List[ast.Import]:
     if not src_imports:
         return dest_imports
-    merged = []
+    merged = dest_imports.copy()
     for src_import in src_imports:
         if isinstance(src_import, ast.Import):
             merged = merge_import(src_import, merged)
         elif isinstance(src_import, ast.ImportFrom):
             merged = merge_import_from(src_import, merged)
-    for dest_import in dest_imports:
-        if isinstance(dest_import, ast.Import):
-            merged = merge_import(dest_import, merged)
-        elif isinstance(dest_import, ast.ImportFrom):
-            merged = merge_import_from(dest_import, merged)
     return merged
 
 def merge_import(src_import: ast.Import, dest_imports: List[ast.Import]) -> List[ast.Import]:
@@ -57,6 +55,7 @@ def merge_import_from(src_import: ast.ImportFrom, dest_imports: List[ast.Import]
             existing_names = set(a.name for a in dest_import.names)
             new_names = [alias for alias in src_import.names if alias.name not in existing_names]
             dest_import.names.extend(new_names)
+            dest_import.names.sort(key=lambda x: x.name)
             return dest_imports
     dest_imports.append(src_import)
     return dest_imports
