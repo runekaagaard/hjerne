@@ -1,0 +1,5 @@
+#!/bin/bash
+
+bash << EOF
+aider file1 file2
+EOF
