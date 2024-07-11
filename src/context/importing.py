@@ -40,7 +40,7 @@ def merge_imports(src_imports: List[ast.Import], dest_imports: List[ast.Import])
         elif isinstance(src_import, ast.ImportFrom):
             merged = merge_import_from(src_import, merged)
     
-    return merged
+    return list(set(merged))  # Remove duplicates without preserving order
 
 def merge_import(src_import: ast.Import, dest_imports: List[ast.Import]) -> List[ast.Import]:
     for alias in src_import.names:
