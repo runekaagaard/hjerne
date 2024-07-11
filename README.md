@@ -1,6 +1,6 @@
 # Hjerne
 
-Hjerne is an app for managing projects, changesets, and contexts. It uses Tree-sitter to understand the code and supports sending changesets into a changeset file or the Emacs ChatGPT-shell buffer and merging the updated code directly back into your project.
+Hjerne is a Django-based application for managing projects, changesets, and contexts. It uses Tree-sitter to understand code and supports sending changesets into a changeset file or the Emacs ChatGPT-shell buffer, and merging the updated code directly back into your project.
 
 ## Features
 
@@ -15,103 +15,32 @@ Hjerne is an app for managing projects, changesets, and contexts. It uses Tree-s
 
 ## Management Commands
 
-### `project_add`
+### Project Management
 
-Adds a new project.
+- `project_add`: Add a new project.
+- `project_list`: List all projects with their IDs and titles.
 
-Usage:
-```sh
-python manage.py project_add <title> <description>
-```
+### Changeset Management
 
-### `project_list`
+- `changeset_add`: Add a new changeset to a project.
+- `changeset_list`: List all changesets for a given project.
+- `changeset_clear_context`: Clear all contexts in a changeset.
 
-Lists all projects with their IDs and titles.
+### Context Management
 
-Usage:
-```sh
-python manage.py project_list
-```
+- `context_add`: Add a context to a changeset.
+- `context_add_range`: Add contexts to a changeset for a given range of lines in a file.
+- `context_remove`: Remove a context from a changeset.
+- `context_remove_range`: Remove contexts from a changeset for a given range of lines in a file.
+- `context_update`: Update the context for a given changeset.
+- `context_update_markdown`: Update the context for a given changeset using a markdown file.
+- `context_code`: Output code for a given changeset.
+- `context_code_markdown`: Output code for a given changeset in markdown format, grouped by language.
 
-### `changeset_add`
+### Tree-sitter Integration
 
-Adds a new changeset to a project.
-
-Usage:
-```sh
-python manage.py changeset_add <project_id> <title>
-```
-
-### `changeset_list`
-
-Lists all changesets for a given project.
-
-Usage:
-```sh
-python manage.py changeset_list <project_id>
-```
-
-### `changeset_clear_context`
-
-Clears all contexts in a changeset.
-
-Usage:
-```sh
-python manage.py changeset_clear_context <changeset_id>
-```
-
-### `context_add`
-
-Adds a context to a changeset.
-
-Usage:
-```sh
-python manage.py context_add <changeset_id> <filename> <linenumber>
-```
-
-### `context_add_range`
-Adds contexts to a changeset for a given range of lines in a file.
-
-Usage:
-```sh
-python manage.py context_add_range <changeset_id> <file_path> <from_line> <to_line>
-```
-
-### `context_remove`
-
-Removes a context from a changeset.
-
-Usage:
-```sh
-python manage.py context_remove <changeset_id> <filename> <linenumber>
-```
-
-### `context_update`
-
-Updates the context for a given changeset.
-
-Usage:
-```sh
-python manage.py context_update <changeset_id> <replacement_file> [--from-markdown]
-```
-
-### `treesitter_top_level_symbols_in_range`
-Outputs top-level symbols in a given range for a given file using Tree-sitter.
-
-Usage:
-```sh
-python manage.py treesitter_top_level_symbols_in_range <file_path> <row_from> <row_to>
-```
-
-
-### `context_code`
-
-Outputs code for a given changeset.
-
-Usage:
-```sh
-python manage.py context_code <changeset_id>
-```
+- `treesitter_top_level_symbols`: Output top-level symbols for a given file using Tree-sitter.
+- `treesitter_top_level_symbols_in_range`: Output top-level symbols in a given range for a given file using Tree-sitter.
 
 ## Emacs Integration
 
@@ -122,10 +51,10 @@ Hjerne provides a set of Emacs Lisp functions to interact with the Django manage
 To use Hjerne with Emacs, add the following to your `init.el` file:
 
 ```emacs-lisp
-(add-to-list 'load-path "/install/path/to/hjerne/src")
+(add-to-list 'load-path "/path/to/hjerne/src")
 (require 'hjerne)
-(setq hjerne-install-path "/install/path/to/hjerne/src")
-(setq hjerne-replacement-file "/path/to/my/changeset.py")
+(setq hjerne-install-path "/path/to/hjerne/src")
+(setq hjerne-replacement-file "/path/to/changeset.py")
 (setq hjerne-python-executable-path "/path/to/python")
 (setq chatgpt-shell-prompt-query-response-style 'shell)
 ```
@@ -137,9 +66,9 @@ To use Hjerne with Emacs, add the following to your `init.el` file:
 - `hjerne-changeset-add`: Add a new changeset to the current project.
 - `hjerne-changeset-select`: Select a changeset for the given project and set `hjerne-changeset-id`.
 - `hjerne-context-add-dwim`: Add context to a changeset using the current line in the active buffer or a selected region.
-- `hjerne-context-remove`: Remove context from a changeset using the current line in the active buffer.
+- `hjerne-context-remove-dwim`: Remove context from a changeset using the current line in the active buffer or a selected region.
 - `hjerne-context-code`: Output code for a given changeset and write to the replacement file.
-- `hjerne-context-update`: Update the context for a given changeset.
+- `hjerne-context-update-markdown`: Update the context for a given changeset using a markdown file.
 - `hjerne-send-context-code-to-chatgpt-shell`: Send context code to ChatGPT shell with a prefix message.
 - `hjerne-receive-replacement-from-chatgpt-shell`: Receive replacement from ChatGPT shell, update context, and regenerate context code.
 - `hjerne-changeset-clear-context`: Clear all contexts in the current changeset.
@@ -147,7 +76,9 @@ To use Hjerne with Emacs, add the following to your `init.el` file:
 
 ### Hydra Menu
 
-```emacs-lisp
+Hjerne provides a Hydra menu for easy access to its functions:
+
+```
 ^Hjerne^
 ^Project^          ^Changeset^       ^Context^         ^Other^
 ------------------------------------------------------------------------------
@@ -163,10 +94,12 @@ Changeset: %`hjerne-changeset-id %s`hjerne-changeset-title
 
 ## Getting Started
 
-To get started with Hjerne, follow these steps to set up your environment and begin managing your projects efficiently:
+To get started with Hjerne:
 
 1. Clone the repository.
 2. Install the required dependencies listed in `requirements.txt`.
 3. Set up your Django environment and run the necessary migrations.
 4. Start using the management commands to add projects, changesets, and contexts.
 5. Integrate with Emacs for an enhanced coding experience.
+
+For detailed usage instructions, refer to the individual command descriptions and Emacs function documentation.
