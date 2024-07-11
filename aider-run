@@ -8,7 +8,6 @@ list_files() {
     -not -path '*__pycache__*' \
     -not -path '*db.sqlite3' \
     -not -path '*LICENSE' \
-    -not -path '*.txt' \
     -not -path '*migrations*' \
     -not -path '*asgi.py' \
     -not -path '*wsgi.py' \
