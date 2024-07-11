@@ -54,7 +54,8 @@ from django.http import HttpResponse
     
     assert "from django.db import models" in result
     assert "from django.http import HttpResponse, JsonResponse" in result
-    assert result.count("from django.http import") == 1  # Ensure there's only one import statement for django.http
+    http_import_count = result.count("from django.http import")
+    assert http_import_count == 1, f"Expected 1 'from django.http import' statement, but found {http_import_count}"
 
 def test_merge_python_imports_with_no_imports():
     src_code = "def some_function():\n    pass\n"
