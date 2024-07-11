@@ -70,7 +70,7 @@ def merge_import_from(src_import: ast.ImportFrom, dest_imports: List[ast.Import]
         existing_import.names.sort(key=lambda x: x.name)
     else:
         dest_imports.append(src_import)
-    return list(set(dest_imports))  # Remove duplicates
+    return dest_imports
 
 def insert_imports(code: str, imports: List[ast.Import]) -> str:
     lines = code.splitlines()
