@@ -15,32 +15,22 @@ Hjerne is a Django-based application for managing projects, changesets, and cont
 
 ## Management Commands
 
-### Project Management
+Hjerne provides a set of Django management commands to interact with projects, changesets, and contexts. For a detailed list of all available commands and their usage, please refer to the [MANAGEMENT_COMMANDS.md](MANAGEMENT_COMMANDS.md) file.
 
-- `project_add`: Add a new project.
-- `project_list`: List all projects with their IDs and titles.
+These commands cover various aspects of the application, including:
 
-### Changeset Management
+- Project Management
+- Changeset Management
+- Context Management
+- Tree-sitter Integration
 
-- `changeset_add`: Add a new changeset to a project.
-- `changeset_list`: List all changesets for a given project.
-- `changeset_clear_context`: Clear all contexts in a changeset.
+You can run these commands using the Django `manage.py` script. For example:
 
-### Context Management
+```
+python manage.py project_add "My Project" "This is a description of my project"
+```
 
-- `context_add`: Add a context to a changeset.
-- `context_add_range`: Add contexts to a changeset for a given range of lines in a file.
-- `context_remove`: Remove a context from a changeset.
-- `context_remove_range`: Remove contexts from a changeset for a given range of lines in a file.
-- `context_update`: Update the context for a given changeset.
-- `context_update_markdown`: Update the context for a given changeset using a markdown file.
-- `context_code`: Output code for a given changeset.
-- `context_code_markdown`: Output code for a given changeset in markdown format, grouped by language.
-
-### Tree-sitter Integration
-
-- `treesitter_top_level_symbols`: Output top-level symbols for a given file using Tree-sitter.
-- `treesitter_top_level_symbols_in_range`: Output top-level symbols in a given range for a given file using Tree-sitter.
+For more information on each command and its arguments, please consult the MANAGEMENT_COMMANDS.md file.
 
 ## Emacs Integration
 
