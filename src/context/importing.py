@@ -27,18 +27,12 @@ def extract_imports(tree: ast.AST) -> List[ast.Import]:
     return [node for node in tree.body if isinstance(node, (ast.Import, ast.ImportFrom))]
 
 def merge_imports(src_imports: List[ast.Import], dest_imports: List[ast.Import]) -> List[ast.Import]:
-    merged = []
+    merged = dest_imports.copy()
     for src_import in src_imports:
         if isinstance(src_import, ast.Import):
             merged = merge_import(src_import, merged)
         elif isinstance(src_import, ast.ImportFrom):
             merged = merge_import_from(src_import, merged)
-    
-    for dest_import in dest_imports:
-        if isinstance(dest_import, ast.Import):
-            merged = merge_import(dest_import, merged)
-        elif isinstance(dest_import, ast.ImportFrom):
-            merged = merge_import_from(dest_import, merged)
     
     return merged
 
@@ -61,9 +55,11 @@ def merge_import_from(src_import: ast.ImportFrom, dest_imports: List[ast.Import]
         new_names = [alias for alias in src_import.names if alias.name not in existing_names]
         existing_import.names.extend(new_names)
         existing_import.names.sort(key=lambda x: x.name)
+        if len(existing_import.names) > 1:
+            existing_import.names = [ast.alias(name='(', asname=None)] + existing_import.names + [ast.alias(name=')', asname=None)]
     else:
         dest_imports.append(src_import)
-    return dest_imports
+    return list(set(dest_imports))  # Remove duplicates
 
 def insert_imports(code: str, imports: List[ast.Import]) -> str:
     lines = code.splitlines()
