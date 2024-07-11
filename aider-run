@@ -1,5 +1,6 @@
 #!/bin/bash
 
+files=$(make -s list-files)
 bash << EOF
-aider file1 file2
+aider $files
 EOF
