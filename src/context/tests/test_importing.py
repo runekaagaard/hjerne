@@ -22,11 +22,7 @@ class SomeClass:
 """
 
 def test_merge_python_imports(sample_src_code, sample_dest_code):
-    result = merge_python_imports(sample_src_code, sample_dest_code)
-    
-    print("\nMerged Python Imports Result:")
-    print(result)
-    print("\n")  # Add an extra newline for clarity in the output
+    result = merge_python_imports(sample_src_code, sample_dest_code, debug=True)
     
     # Check that all original imports are preserved
     assert "import sys" in result
@@ -57,7 +53,7 @@ from django.http import JsonResponse
 from django.db import models
 from django.http import HttpResponse
 """
-    result = merge_python_imports(src_code, dest_code)
+    result = merge_python_imports(src_code, dest_code, debug=True)
     
     assert "from django.db import models" in result
     assert "from django.http import HttpResponse, JsonResponse" in result
@@ -67,7 +63,7 @@ from django.http import HttpResponse
 def test_merge_python_imports_with_no_imports():
     src_code = "def some_function():\n    pass\n"
     dest_code = "class SomeClass:\n    pass\n"
-    result = merge_python_imports(src_code, dest_code)
+    result = merge_python_imports(src_code, dest_code, debug=True)
     
     assert result == dest_code  # No changes should be made
 
@@ -83,7 +79,7 @@ import module2 as m2
 from module1 import func3
 import module2
 """
-    result = merge_python_imports(src_code, dest_code)
+    result = merge_python_imports(src_code, dest_code, debug=True)
     
     assert "from module1 import (" in result
     assert "func1," in result
