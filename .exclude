@@ -1,0 +1,7 @@
+# Exclude patterns
+*.pyc
+__pycache__/
+db.sqlite3
+*.md
+LICENSE
+*.txt
