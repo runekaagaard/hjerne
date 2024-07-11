@@ -2,7 +2,7 @@
 
 # Function to list files
 list_files() {
-    find . -type f -not -path '*/\.git/*' $(sed 's/^/-not -path "*/' .exclude | sed 's/$$/*"/' | tr '\n' ' ')
+    find . -type f -not -path '*/\.git/*' $(sed 's/^/-not -path "*/' .exclude | sed 's/$/*"/' | tr '\n' ' ')
 }
 
 # Get the list of files
