@@ -21,6 +21,12 @@ list_files() {
     -not -path '*.pytest_cache*'
 }
 
+# Check for --list-files option
+if [[ "$1" == "--list-files" ]]; then
+    list_files
+    exit 0
+fi
+
 # Get the list of files
 files=$(list_files)
 
