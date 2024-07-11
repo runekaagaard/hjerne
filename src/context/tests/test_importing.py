@@ -34,8 +34,12 @@ def test_merge_python_imports(sample_src_code, sample_dest_code):
     
     # Check the order of imports
     lines = result.split('\n')
-    assert lines.index("import os") < lines.index("import sys")
-    assert lines.index("from django.db import models") < lines.index("from django.http import HttpResponse")
+    os_index = lines.index("import os")
+    sys_index = lines.index("import sys")
+    assert os_index < sys_index, f"'import os' (index: {os_index}) should come before 'import sys' (index: {sys_index})"
+    db_index = lines.index("from django.db import models")
+    http_index = lines.index("from django.http import HttpResponse")
+    assert db_index < http_index, f"'from django.db import models' (index: {db_index}) should come before 'from django.http import HttpResponse' (index: {http_index})"
     
     # Check that non-import code is preserved
     assert "class SomeClass:" in result
