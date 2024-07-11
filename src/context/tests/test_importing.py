@@ -43,6 +43,7 @@ def test_merge_python_imports(sample_src_code, sample_dest_code):
     # Check that non-import code is preserved
     assert "class SomeClass:" in result
     assert "def some_function():" not in result  # This should not be in the result
+    assert "def some_function():" not in result  # This should not be in the result
 
 def test_merge_python_imports_with_existing_imports():
     src_code = """
