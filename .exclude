@@ -10,7 +10,6 @@ asgi.py
 wsgi.py
 manage.py
 *~
-Makefile
 .aider*
 changeset.py
 .gitignore
