@@ -1,14 +1,15 @@
 import ast
 from typing import List, Tuple
 
-def merge_python_imports(src_code: str, destination_code: str) -> str:
+def merge_python_imports(src_code: str, destination_code: str, debug: bool = False) -> str:
     """
     Extracts top level import statements in the src_code and merges them into the destination_code.
     Returns only the merged import statements as a string.
     """
-    import inspect
-    current_function = inspect.currentframe().f_back.f_code.co_name
-    print(f"\nCalled from: {current_function}")
+    if debug:
+        print(f"Source code:\n{src_code}\n")
+        print(f"Destination code:\n{destination_code}\n")
+
     src_tree = ast.parse(src_code)
     dest_tree = ast.parse(destination_code)
 
@@ -21,9 +22,10 @@ def merge_python_imports(src_code: str, destination_code: str) -> str:
     merged_imports = merge_imports(src_imports, dest_imports)
 
     result = "\n".join(ast.unparse(imp) for imp in merged_imports)
-    print("Merge result:")
-    print(result)
-    print()  # Add an extra newline for clarity
+    
+    if debug:
+        print(f"Merge result:\n{result}\n")
+
     return result
 
 def extract_imports(tree: ast.AST) -> List[ast.Import]:
