@@ -67,8 +67,6 @@ def merge_import_from(src_import: ast.ImportFrom, dest_imports: List[ast.Import]
         new_names = [alias for alias in src_import.names if alias.name not in existing_names]
         existing_import.names.extend(new_names)
         existing_import.names.sort(key=lambda x: x.name)
-        if len(existing_import.names) > 1:
-            existing_import.names = [ast.alias(name='(', asname=None)] + existing_import.names + [ast.alias(name=')', asname=None)]
     else:
         dest_imports.append(src_import)
     return list(set(dest_imports))  # Remove duplicates

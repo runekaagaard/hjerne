@@ -57,6 +57,10 @@ from django.http import HttpResponse
     assert "from django.http import HttpResponse, JsonResponse" in result
     http_import_count = result.count("from django.http import")
     assert http_import_count == 1, f"Expected 1 'from django.http import' statement, but found {http_import_count}"
+    
+    # Check that the imports are sorted alphabetically
+    http_import_line = next(line for line in result.split('\n') if line.startswith("from django.http import"))
+    assert http_import_line == "from django.http import HttpResponse, JsonResponse"
 
 def test_merge_python_imports_with_no_imports():
     src_code = "def some_function():\n    pass\n"
