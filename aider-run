@@ -7,7 +7,6 @@ list_files() {
     -not -path '*.pyc' \
     -not -path '*__pycache__*' \
     -not -path '*db.sqlite3' \
-    -not -path '*.md' \
     -not -path '*LICENSE' \
     -not -path '*.txt' \
     -not -path '*migrations*' \
@@ -18,6 +17,7 @@ list_files() {
     -not -path '*Makefile' \
     -not -path '*.aider*' \
     -not -path '*changeset.py' \
+    -not -path '*changeset.md' \
     -not -path '*.gitignore'
 }
 
