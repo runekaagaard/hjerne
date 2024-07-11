@@ -196,35 +196,5 @@ Options:
   -h, --help    Show this help message and exit
 ```
 
-## treesitter_top_level_symbols
-
-```bash
-Usage: python manage.py treesitter_top_level_symbols <file_path>
-
-Output top-level symbols for a given file using Tree-sitter.
-
-Arguments:
-  file_path     The path to the file
-
-Options:
-  -h, --help    Show this help message and exit
-```
-
-## treesitter_top_level_symbols_in_range
-
-```bash
-Usage: python manage.py treesitter_top_level_symbols_in_range <file_path> <row_from> <row_to>
-
-Output top-level symbols in a given range for a given file using Tree-sitter.
-
-Arguments:
-  file_path     The path to the file
-  row_from      The starting row number
-  row_to        The ending row number
-
-Options:
-  -h, --help    Show this help message and exit
-```
-
 For more information on a specific command, run:
   python manage.py <command> --help

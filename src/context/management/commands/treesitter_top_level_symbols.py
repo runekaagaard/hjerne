@@ -1,3 +1,5 @@
+# This command is for debug usage only
+
 from django.core.management.base import BaseCommand, CommandError
 from context.api import init_file, top_level_symbols
 
